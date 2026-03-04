@@ -516,7 +516,7 @@ export default function Home() {
                 className="text-xs rounded-full bg-white/6 border border-white/10 px-3 py-1.5 hover:bg-white/10 transition-colors"
               >
                 <span className="text-foreground">{c.name}</span>
-                <span className="text-muted-foreground"> — {c.industry}</span>
+                <span className="text-muted-foreground"> — {t(`client.industry.${c.id}`)}</span>
               </a>
             ))}
           </div>

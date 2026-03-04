@@ -86,11 +86,21 @@ export type Solution = {
   };
 };
 
+export type ClientSector =
+  | "Engineering"
+  | "Healthcare"
+  | "Food"
+  | "Manufacturing"
+  | "Distribution"
+  | "Education"
+  | "Hosting";
+
 export type Client = {
   id: string;
   name: string;
   url: string;
-  industry: string;
+  sector: ClientSector;
+  industry: string; // short description
   note?: string;
 };
 
@@ -111,78 +121,91 @@ export const clients: Client[] = [
     id: "meteory",
     name: "Meteory Fire Safety Solutions",
     url: "https://www.meteory-eg.com/",
+    sector: "Manufacturing",
     industry: "Fire safety manufacturing",
   },
   {
     id: "sparx",
     name: "Sparx Engineering",
     url: "https://sparx-engineering.com/",
+    sector: "Engineering",
     industry: "Fire protection engineering",
   },
   {
     id: "altawfeek",
     name: "AlTawfeek Engineering",
     url: "https://altawfeek-engineering.com/",
+    sector: "Engineering",
     industry: "Fire protection engineering",
   },
   {
     id: "dnc",
     name: "Dr. Hanin Naiem / DNC Clinic",
     url: "https://www.drhaninaiem.com/",
+    sector: "Healthcare",
     industry: "Healthcare (endocrinology)",
   },
   {
     id: "3a",
     name: "3A International",
     url: "https://3a-international.co/",
+    sector: "Food",
     industry: "Food supply",
   },
   {
     id: "tawplast",
     name: "Tawplast",
     url: "http://tawplast.com/",
+    sector: "Manufacturing",
     industry: "Plastic injection molding",
   },
   {
     id: "crownycup",
     name: "Crownycup",
     url: "http://crownycup.com/",
+    sector: "Manufacturing",
     industry: "Food & beverage packaging",
   },
   {
     id: "el-etehad",
     name: "El Etehad for Shoes Industries",
     url: "http://el-etehad.com/",
+    sector: "Manufacturing",
     industry: "PPE & industrial footwear",
   },
   {
     id: "egyspring",
     name: "EGYSPRING",
     url: "http://egyspring.com/",
+    sector: "Manufacturing",
     industry: "Industrial manufacturing (springs)",
   },
   {
     id: "nextsupply",
     name: "Next Supply Trading & Distribution",
     url: "https://www.nextsupplytd.com/",
+    sector: "Distribution",
     industry: "Coffee distribution",
   },
   {
     id: "hostocta",
     name: "Hostocta",
     url: "http://hostocta.com/",
+    sector: "Hosting",
     industry: "Web hosting",
   },
   {
     id: "bello-food",
     name: "Bello Food",
     url: "https://www.bello-food.com/",
+    sector: "Food",
     industry: "FMCG (olives & pickles)",
   },
   {
     id: "coursatee",
     name: "Coursatee Training Center",
     url: "https://www.coursatee.com/",
+    sector: "Education",
     industry: "Education (exam prep)",
   },
 ];

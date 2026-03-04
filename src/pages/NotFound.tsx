@@ -1,5 +1,5 @@
 /*
-Cairo Circuit Futurism — NotFound (updated)
+Cairo Circuit Futurism — NotFound
 */
 
 import SiteLayout from "@/components/SiteLayout";
@@ -7,17 +7,20 @@ import SeoHead from "@/components/SeoHead";
 import { site } from "@/lib/content";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function NotFound() {
+  const { t } = useI18n();
+
   return (
-    <SiteLayout title="Page not found" subtitle="The page you requested does not exist.">
-      <SeoHead title={`404 | ${site.name}`} description="Page not found." path="/404" noindex />
+    <SiteLayout title={t("notFound.title")} subtitle={t("notFound.subtitle")}>
+      <SeoHead title={`404 | ${site.name}`} description={t("notFound.title")} path="/404" noindex />
       <div className="pt-10 flex flex-wrap gap-2">
         <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-          <Link href="/">Back to home</Link>
+          <Link href="/">{t("notFound.home")}</Link>
         </Button>
         <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-          <Link href="/work">View work</Link>
+          <Link href="/work">{t("notFound.work")}</Link>
         </Button>
       </div>
     </SiteLayout>

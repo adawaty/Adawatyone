@@ -5,33 +5,28 @@ Cairo Circuit Futurism — Contact
 
 import SiteLayout from "@/components/SiteLayout";
 import SeoHead from "@/components/SeoHead";
-import { site, services } from "@/lib/content";
+import { site } from "@/lib/content";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useI18n } from "@/contexts/I18nContext";
+import { getServices } from "@/lib/contentLocalized";
 
 export default function Contact() {
+  const { lang, t } = useI18n();
   const [service, setService] = useState<string | undefined>(undefined);
+  const services = getServices(lang);
 
   return (
-    <SiteLayout
-      title="Contact"
-      subtitle="Tell us what you want to launch or improve. We’ll reply with a clear next step and a DFY scope proposal."
-    >
+    <SiteLayout title={t("contact.page.title")} subtitle={t("contact.page.subtitle")}>
       <SeoHead
-        title={`Contact | ${site.name}`}
-        description="Request a DFY scope for Brand → Build → Demand. Get a clear next step and a sprint plan."
+        title={`${t("contact.page.title")} | ${site.name}`}
+        description={t("contact.seo.desc")}
         path="/contact"
         type="website"
       />
@@ -42,9 +37,8 @@ export default function Contact() {
               className="grid gap-5"
               onSubmit={(e) => {
                 e.preventDefault();
-                toast.success("Message received (demo)", {
-                  description:
-                    "This is a static site. Connect a real form endpoint when you deploy.",
+                toast.success(t("contact.toast.title"), {
+                  description: t("contact.toast.desc"),
                 });
                 (e.currentTarget as HTMLFormElement).reset();
                 setService(undefined);
@@ -52,11 +46,17 @@ export default function Contact() {
             >
               <div className="grid gap-2 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" name="name" required autoComplete="name" placeholder="Your name" />
+                  <Label htmlFor="name">{t("contact.form.name")}</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    required
+                    autoComplete="name"
+                    placeholder={t("contact.form.namePh")}
+                  />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("contact.form.email")}</Label>
                   <Input
                     id="email"
                     name="email"
@@ -64,28 +64,28 @@ export default function Contact() {
                     type="email"
                     autoComplete="email"
                     spellCheck={false}
-                    placeholder="name@company.com"
+                    placeholder={t("contact.form.emailPh")}
                   />
                 </div>
               </div>
 
               <div className="grid gap-2 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">{t("contact.form.phone")}</Label>
                   <Input
                     id="phone"
                     name="phone"
                     type="tel"
                     inputMode="tel"
                     autoComplete="tel"
-                    placeholder="+20 …"
+                    placeholder={t("contact.form.phonePh")}
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="service">Interested in</Label>
+                  <Label htmlFor="service">{t("contact.form.interested")}</Label>
                   <Select value={service} onValueChange={setService}>
                     <SelectTrigger id="service" className="bg-white/3 border-white/10">
-                      <SelectValue placeholder="Select a service" />
+                      <SelectValue placeholder={t("contact.form.servicePh")} />
                     </SelectTrigger>
                     <SelectContent>
                       {services.map((s) => (
@@ -93,7 +93,7 @@ export default function Contact() {
                           {s.title}
                         </SelectItem>
                       ))}
-                      <SelectItem value="not-sure">Not sure yet</SelectItem>
+                      <SelectItem value="not-sure">{t("contact.form.notSure")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <input type="hidden" name="service" value={service ?? ""} />
@@ -101,47 +101,51 @@ export default function Contact() {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="message">Message</Label>
+                <Label htmlFor="message">{t("contact.form.message")}</Label>
                 <Textarea
                   id="message"
                   name="message"
                   required
-                  placeholder="What are you launching or improving (brand, website, content, AI workflows)?"
+                  placeholder={t("contact.form.messagePh")}
                   className="min-h-32 bg-white/3 border-white/10"
                 />
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <Button type="submit" size="lg">
-                  Send message
+                  {t("contact.form.send")}
                 </Button>
                 <div className="text-xs text-muted-foreground">
-                  Prefer email? Contact: <a className="underline hover:text-foreground" href="mailto:alazzeh.ml@gmail.com">alazzeh.ml@gmail.com</a>
+                  {t("contact.form.preferEmail")} {" "}
+                  <a className="underline hover:text-foreground" href="mailto:alazzeh.ml@gmail.com">
+                    alazzeh.ml@gmail.com
+                  </a>
                 </div>
               </div>
             </form>
           </Card>
 
           <Card className="glass rounded-2xl p-7">
-            <div className="text-lg font-semibold">Direct lines</div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Add your official business contacts here (phone/WhatsApp/address).
-            </p>
+            <div className="text-lg font-semibold">{t("contact.direct.title")}</div>
+            <p className="mt-2 text-sm text-muted-foreground">{t("contact.direct.subtitle")}</p>
 
             <div className="mt-6 grid gap-3">
               <div className="rounded-2xl border border-white/10 bg-white/3 p-5">
-                <div className="text-sm font-semibold">Email</div>
-                <a className="mt-1 block text-sm text-muted-foreground underline hover:text-foreground" href="mailto:alazzeh.ml@gmail.com">
+                <div className="text-sm font-semibold">{t("contact.direct.email")}</div>
+                <a
+                  className="mt-1 block text-sm text-muted-foreground underline hover:text-foreground"
+                  href="mailto:alazzeh.ml@gmail.com"
+                >
                   alazzeh.ml@gmail.com
                 </a>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/3 p-5">
-                <div className="text-sm font-semibold">Phone</div>
-                <div className="mt-1 text-sm text-muted-foreground">+20 10 0000 0000 (replace)</div>
+                <div className="text-sm font-semibold">{t("contact.direct.phone")}</div>
+                <div className="mt-1 text-sm text-muted-foreground">+20 10 0000 0000</div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/3 p-5">
-                <div className="text-sm font-semibold">Working hours</div>
-                <div className="mt-1 text-sm text-muted-foreground">Sun–Thu, 9:00–18:00</div>
+                <div className="text-sm font-semibold">{t("contact.direct.hours")}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{t("contact.direct.hoursValue")}</div>
               </div>
             </div>
           </Card>
