@@ -16,6 +16,7 @@ export type SeoProps = {
   type?: "website" | "article";
   noindex?: boolean;
   jsonLd?: unknown;
+  ogImageAlt?: string;
 };
 
 export default function SeoHead({
@@ -26,12 +27,58 @@ export default function SeoHead({
   type = "website",
   noindex,
   jsonLd,
+  ogImageAlt,
 }: SeoProps) {
   const { lang } = useI18n();
   const urlObj = new URL(path, site.url);
   urlObj.searchParams.set("lang", lang);
   const url = urlObj.toString();
   const ogImage = image ?? new URL("/og.png", site.url).toString();
+  const ogAlt = ogImageAlt ?? `${site.name} — ${site.brandTagline}`;
+
+  const org = (site as any).organization as
+    | {
+        legalName: string;
+        areaServed: string[];
+        registeredAddress: { country: string; state?: string; city: string; postalCode: string; streetAddress: string };
+        tradingAddress: { country: string; city: string; postalCode: string; streetAddress: string };
+      }
+    | undefined;
+
+  const orgJsonLd = org
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: site.name,
+        legalName: org.legalName,
+        url: site.url,
+        areaServed: org.areaServed,
+        address: [
+          {
+            "@type": "PostalAddress",
+            streetAddress: org.registeredAddress.streetAddress,
+            addressLocality: org.registeredAddress.city,
+            addressRegion: org.registeredAddress.state,
+            postalCode: org.registeredAddress.postalCode,
+            addressCountry: org.registeredAddress.country,
+          },
+          {
+            "@type": "PostalAddress",
+            streetAddress: org.tradingAddress.streetAddress,
+            addressLocality: org.tradingAddress.city,
+            postalCode: org.tradingAddress.postalCode,
+            addressCountry: org.tradingAddress.country,
+          },
+        ],
+      }
+    : null;
+
+  const webSiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: site.name,
+    url: site.url,
+  };
 
   return (
     <Helmet>
@@ -54,15 +101,31 @@ export default function SeoHead({
       <meta property="og:site_name" content={site.name} />
       <meta property="og:locale" content={site.locale} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={ogAlt} />
+      <meta property="og:image:width" content="1376" />
+      <meta property="og:image:height" content="768" />
+
+      <meta name="twitter:image:alt" content={ogAlt} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
-      {jsonLd ? (
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      ) : null}
+      <meta name="theme-color" content="#051018" />
+
+      {(() => {
+        const payload = Array.isArray(jsonLd)
+          ? jsonLd
+          : jsonLd
+            ? [jsonLd]
+            : [];
+        if (orgJsonLd) payload.unshift(orgJsonLd);
+        payload.unshift(webSiteJsonLd);
+        return payload.length ? (
+          <script type="application/ld+json">{JSON.stringify(payload)}</script>
+        ) : null;
+      })()}
     </Helmet>
   );
 }

@@ -10,6 +10,24 @@ export const site = {
   url: "https://adawaty.net",
   locale: "en_US",
   brandTagline: "Brand → Build → Demand.",
+
+  organization: {
+    legalName: "Adawaty",
+    areaServed: ["US", "SK", "Worldwide"],
+    registeredAddress: {
+      country: "United States",
+      state: "Wyoming",
+      city: "Sheridan",
+      postalCode: "82801",
+      streetAddress: "30 N Gould ST Suite R",
+    },
+    tradingAddress: {
+      country: "Slovakia",
+      city: "Bratislava",
+      postalCode: "821 04",
+      streetAddress: "Ivánska cesta 30/D, Aircraft Building",
+    },
+  },
 };
 
 export type Service = {

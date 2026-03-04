@@ -74,7 +74,7 @@ export default function About() {
 
             <div className="mt-6 grid gap-6 md:grid-cols-[180px_1fr]">
               <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/4">
-                <img src={founderImg} alt="Founder portrait" className="h-full w-full object-cover" loading="lazy" />
+                <img src={founderImg} alt="Adawaty founder portrait" className="h-full w-full object-cover" loading="lazy" />
               </div>
               <div>
                 <div className="text-base font-semibold">{t("about.founder.name")}</div>

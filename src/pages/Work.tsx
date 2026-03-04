@@ -117,7 +117,7 @@ export default function Work() {
                         {thumbs[c.id] ? (
                           <img
                             src={thumbs[c.id]}
-                            alt={`${c.name} website thumbnail`}
+                            alt={`${c.name} — website screenshot`}
                             className="h-full w-full object-cover opacity-95 transition-transform duration-500 group-hover:scale-[1.02]"
                             style={{ objectPosition: "50% 24%" }}
                             loading="lazy"

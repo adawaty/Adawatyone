@@ -99,7 +99,7 @@ export default function Home() {
               >
                 <img
               src={heroImg}
-              alt="Abstract hero background"
+              alt="Cairo Circuit Futurism abstract background"
               className="h-full w-full object-cover opacity-65"
               loading="eager"
               fetchPriority="high"
@@ -110,7 +110,7 @@ export default function Home() {
             ) : (
               <img
                 src={heroImg}
-                alt="Abstract hero background"
+                alt="Cairo Circuit Futurism abstract background"
                 className="h-full w-full object-cover opacity-65"
                 loading="eager"
                 fetchPriority="high"

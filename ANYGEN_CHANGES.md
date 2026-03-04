@@ -166,7 +166,21 @@ Files:
 
 ---
 
-## 12) Git workflow
+## 12) SEO + LLM polish
+
+- Added a dedicated Open Graph image: `public/og.png`.
+- Improved `SeoHead` to always inject:
+  - Organization JSON-LD (with US + Slovakia addresses)
+  - WebSite JSON-LD
+  - OG/Twitter image alt + dimensions
+- Added crawl assets:
+  - `public/sitemap.xml`
+  - `public/robots.txt`
+- Improved image alt text on key pages (Home, Work, About).
+
+---
+
+## 13) Git workflow
 
 ### What was done
 - Before pushing major updates, backup branches were created on GitHub:
