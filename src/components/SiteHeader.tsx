@@ -40,7 +40,7 @@ export default function SiteHeader() {
               <span className="opacity-50">•</span>
               <a className="premium-focus hover:text-foreground" href="tel:+201000000000">+20 100 000 0000</a>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <LanguageSwitcher />
               <Link className="premium-focus hover:text-foreground" href="/ai-visibility-audit">{t("nav.aiAudit")}</Link>
               <span className="opacity-50">•</span>
@@ -53,7 +53,7 @@ export default function SiteHeader() {
       </div>
       <div className="glass bg-background/60">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-16 items-center justify-between gap-2">
             <Link href="/" className="group flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-primary/20 ring-1 ring-primary/40 grid place-items-center">
                 <div className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_22px_oklch(0.73_0.16_190/0.55)]" />
@@ -98,7 +98,7 @@ export default function SiteHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
+                className="md:hidden h-9 w-9 rounded-full bg-white/5 hover:bg-white/10"
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Toggle menu"
               >

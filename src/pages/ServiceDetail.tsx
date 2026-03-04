@@ -1,7 +1,7 @@
 /*
 Cairo Circuit Futurism — Service detail (programmatic SEO)
-- One page per service/pillar to target specific query clusters
-- AIO/AEO friendly: definition, outcomes, FAQs, and structured data
+- One page per service to target specific query clusters
+- Mobile: full-width CTAs + clear headers, less fear
 */
 
 import SiteLayout from "@/components/SiteLayout";
@@ -10,52 +10,36 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { services, site } from "@/lib/content";
-import { ArrowRight, Sparkles, Search, ShieldCheck } from "lucide-react";
+import { site } from "@/lib/content";
+import { getServices } from "@/lib/contentLocalized";
+import { ArrowLeft, ArrowRight, Sparkles, Search, ShieldCheck } from "lucide-react";
 import NotFound from "@/pages/NotFound";
+import { useI18n } from "@/contexts/I18nContext";
 
-const faqByServiceId: Record<string, { q: string; a: string }[]> = {
-  "ai-visibility": [
-    {
-      q: "What is LLM SEO (LLMSEO)?",
-      a: "LLM SEO is optimizing your brand and pages so AI assistants can confidently cite and recommend you. It overlaps with SEO and AEO, but focuses on entity clarity, answer-worthiness, and brand mentions/citations across the web.",
-    },
-    {
-      q: "How do you outrank competitors in AI answers?",
-      a: "We improve: (1) entity clarity (who you are), (2) structured coverage (direct answers, FAQs, comparisons), and (3) proof signals (case studies, references, consistency). Then we track mentions and iterate.",
-    },
-    {
-      q: "Does ranking #1 on Google guarantee AI citations?",
-      a: "No. Strong rankings help, but AI assistants often cite sources based on clarity, relevance, and trust signals. We optimize for both classic rankings and AI citations.",
-    },
-  ],
-  "brand-intelligence": [
-    {
-      q: "What do you mean by Brand Intelligence?",
-      a: "A strategy sprint that clarifies positioning, audience, and offer structure. It turns your brand into a repeatable message that sales, content, and the website can all reuse.",
-    },
-    {
-      q: "What’s the output of the sprint?",
-      a: "A positioning doc, ICP segments, offer architecture, and a narrative map that guides your website and content engine.",
-    },
-  ],
-  "dfy-website": [
-    {
-      q: "Can you build fast without sacrificing quality?",
-      a: "Yes—because we use a tight design system, clear IA, and sprint delivery. We also instrument analytics so the site can be improved post-launch.",
-    },
-  ],
-};
+function getFaqs(id: string, t: (k: string) => string) {
+  const map: Record<string, number> = {
+    "ai-visibility": 3,
+    "brand-intelligence": 2,
+    "dfy-website": 1,
+  };
+  const count = map[id] ?? 0;
+  return Array.from({ length: count }).map((_, idx) => ({
+    q: t(`serviceDetail.faq.${id}.${idx}.q`),
+    a: t(`serviceDetail.faq.${id}.${idx}.a`),
+  }));
+}
 
 export default function ServiceDetail({ id }: { id: string }) {
-  const service = services.find((s) => s.id === id);
+  const { lang, dir, t } = useI18n();
+  const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
 
+  const service = getServices(lang).find((s) => s.id === id);
   if (!service) return <NotFound />;
 
   const title = `${service.title} | ${site.name}`;
   const description = service.summary;
 
-  const faqs = faqByServiceId[id] ?? [];
+  const faqs = getFaqs(id, t);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -89,10 +73,7 @@ export default function ServiceDetail({ id }: { id: string }) {
       : null;
 
   return (
-    <SiteLayout
-      title={service.title}
-      subtitle={`${service.pillar} — DFY deliverables, built for clarity and AI-era discoverability.`}
-    >
+    <SiteLayout title={service.title} subtitle={t("serviceDetail.subtitle")}>
       <SeoHead
         title={title}
         description={description}
@@ -101,16 +82,16 @@ export default function ServiceDetail({ id }: { id: string }) {
         jsonLd={faqJsonLd ? [jsonLd, faqJsonLd] : jsonLd}
       />
 
-      <section className="pt-10">
+      <section className="pt-8 sm:pt-10">
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-          <Card className="glass rounded-2xl p-7">
+          <Card className="glass rounded-2xl p-6 sm:p-7">
             <div className="flex items-center justify-between gap-3">
               <Badge className="bg-white/6 border border-white/10 text-foreground">{service.pillar}</Badge>
-              <span className="text-xs text-primary">DFY • sprint delivery</span>
+              <span className="text-xs text-primary">{t("serviceDetail.dfyTag")}</span>
             </div>
 
             <h2 className="mt-4 text-2xl sm:text-3xl font-semibold text-balance">
-              What you get (deliverables)
+              {t("serviceDetail.whatYouGet")}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground max-w-3xl">{service.summary}</p>
 
@@ -124,40 +105,36 @@ export default function ServiceDetail({ id }: { id: string }) {
             </ul>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)]">
+              <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)] w-full sm:w-auto">
                 <Link href="/contact">
-                  Request scope <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("cta.requestScope")} <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="secondary" className="bg-white/6 hover:bg-white/10">
-                <Link href="/services">Back to services</Link>
+              <Button asChild size="lg" variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
+                <Link href="/services">{t("serviceDetail.backToServices")}</Link>
               </Button>
             </div>
           </Card>
 
-          <Card className="glass rounded-2xl p-7">
+          <Card className="glass rounded-2xl p-6 sm:p-7">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" />
-              Why this matters in AI search
+              {t("serviceDetail.aiWhy.title")}
             </div>
             <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
               <div className="rounded-xl border border-white/10 bg-white/3 p-4">
                 <div className="flex items-center gap-2 font-semibold text-foreground">
                   <Search className="h-4 w-4 text-primary" aria-hidden="true" />
-                  Answer-worthiness
+                  {t("serviceDetail.aiWhy.card0.t")}
                 </div>
-                <p className="mt-1">
-                  We structure content so assistants can lift direct answers (definitions, comparisons, FAQs), not vague marketing.
-                </p>
+                <p className="mt-1">{t("serviceDetail.aiWhy.card0.d")}</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/3 p-4">
                 <div className="flex items-center gap-2 font-semibold text-foreground">
                   <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
-                  Trust signals
+                  {t("serviceDetail.aiWhy.card1.t")}
                 </div>
-                <p className="mt-1">
-                  We connect claims to proof: measurable outcomes, clear scope, consistent entity signals, and clean semantics.
-                </p>
+                <p className="mt-1">{t("serviceDetail.aiWhy.card1.d")}</p>
               </div>
             </div>
           </Card>
@@ -166,8 +143,8 @@ export default function ServiceDetail({ id }: { id: string }) {
 
       {faqs.length ? (
         <section className="mt-12">
-          <Card className="glass rounded-2xl p-7">
-            <div className="text-lg font-semibold">FAQ</div>
+          <Card className="glass rounded-2xl p-6 sm:p-7">
+            <div className="text-lg font-semibold">{t("serviceDetail.faq.title")}</div>
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
               {faqs.map((f) => (
                 <Card key={f.q} className="rounded-2xl border border-white/10 bg-white/3 p-6">
@@ -181,14 +158,12 @@ export default function ServiceDetail({ id }: { id: string }) {
       ) : null}
 
       <section className="mt-12 pb-6">
-        <Card className="glass rounded-2xl p-7">
-          <div className="text-lg font-semibold">Want this done-for-you?</div>
-          <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
-            Book a call and we’ll propose the fastest DFY path from Brand → Build → Demand, including a measurement plan for SEO + AI visibility.
-          </p>
+        <Card className="glass rounded-2xl p-6 sm:p-7">
+          <div className="text-lg font-semibold">{t("serviceDetail.finalCta.title")}</div>
+          <p className="mt-2 text-sm text-muted-foreground max-w-2xl">{t("serviceDetail.finalCta.subtitle")}</p>
           <div className="mt-5">
-            <Button asChild>
-              <Link href="/contact">Book a call</Link>
+            <Button asChild className="w-full sm:w-auto">
+              <Link href="/contact">{t("cta.book")}</Link>
             </Button>
           </div>
         </Card>

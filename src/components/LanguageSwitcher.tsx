@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
         <Button
           variant="secondary"
           size="sm"
-          className="bg-white/6 hover:bg-white/10"
+          className="bg-white/6 hover:bg-white/10 h-9 px-3 rounded-full"
           aria-label={t("lang.label")}
         >
           {current?.native ?? "EN"}

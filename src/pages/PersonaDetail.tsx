@@ -27,13 +27,18 @@ export default function PersonaDetail({ slug }: { slug: string }) {
   if (!p) {
     return (
       <SiteLayout>
-        <SeoHead title={`${site.name} | Page not found`} description="Page not found" noindex path={`/for/${slug}`} />
-        <main className="mx-auto max-w-4xl px-4 sm:px-6 py-12">
-          <h1 className="text-3xl font-semibold">Page not found</h1>
-          <p className="mt-2 text-muted-foreground">Try the personas hub.</p>
+        <SeoHead
+          title={`${site.name} | ${t("notFound.title")}`}
+          description={t("notFound.title")}
+          noindex
+          path={`/for/${slug}`}
+        />
+        <main className="mx-auto max-w-4xl px-4 sm:px-6 py-10 sm:py-12">
+          <h1 className="text-3xl font-semibold">{t("notFound.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("persona.notFound.subtitle")}</p>
           <div className="mt-6">
-            <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-              <Link href="/for">Back to “For”</Link>
+            <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
+              <Link href="/for">{t("persona.notFound.back")}</Link>
             </Button>
           </div>
         </main>
@@ -60,8 +65,8 @@ export default function PersonaDetail({ slug }: { slug: string }) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${site.url}/` },
-      { "@type": "ListItem", position: 2, name: "For", item: `${site.url}/for` },
+      { "@type": "ListItem", position: 1, name: t("nav.home"), item: `${site.url}/` },
+      { "@type": "ListItem", position: 2, name: t("nav.for"), item: `${site.url}/for` },
       { "@type": "ListItem", position: 3, name: p.title, item: `${site.url}/for/${p.slug}` },
     ],
   };
@@ -72,18 +77,18 @@ export default function PersonaDetail({ slug }: { slug: string }) {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What do I get, step-by-step?",
+        name: t("persona.faq.0.q"),
         acceptedAnswer: {
           "@type": "Answer",
-          text: "We run DFY sprints: scope lock → architecture → design → build → launch → handover. Every sprint has visible deliverables.",
+          text: t("persona.faq.0.a"),
         },
       },
       {
         "@type": "Question",
-        name: "Can you connect booking and forms to our workflow?",
+        name: t("persona.faq.1.q"),
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. We map the current process first, then connect scheduling, intake, routing, and reporting so your team actually uses it.",
+          text: t("persona.faq.1.a"),
         },
       },
     ],
@@ -110,21 +115,21 @@ export default function PersonaDetail({ slug }: { slug: string }) {
         jsonLd={[breadcrumbJsonLd, faqJsonLd, successJsonLd]}
       />
 
-      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-12">
         <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/3">
           <div className="absolute inset-0">
-            <img src={hero} alt="Persona hero background" className="h-full w-full object-cover opacity-70" loading="eager" />
+            <img src={hero} alt={t("persona.heroAlt")} className="h-full w-full object-cover opacity-70" loading="eager" />
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
           </div>
           <div className="relative p-6 sm:p-10">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="text-xs tracking-[0.24em] uppercase text-primary/90">Built for</div>
+            <div className="text-xs tracking-[0.24em] uppercase text-primary/90">{t("persona.eyebrow")}</div>
             <h1 className="mt-3 text-3xl sm:text-5xl font-semibold leading-[1.05] text-balance">{p.title}</h1>
             <p className="mt-3 max-w-2xl text-muted-foreground">{p.summary}</p>
           </div>
-          <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)]">
-            <Link href="/contact">Book a call</Link>
+          <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)] w-full sm:w-auto">
+            <Link href="/contact">{t("cta.book")}</Link>
           </Button>
         </div>
           </div>
@@ -234,25 +239,12 @@ export default function PersonaDetail({ slug }: { slug: string }) {
 
         <section className="mt-12 rounded-3xl border border-white/10 bg-white/3 p-6 sm:p-10">
           <h2 className="text-2xl sm:text-3xl font-semibold">{t("persona.marketingPsychology")}</h2>
-          <p className="mt-2 text-muted-foreground max-w-3xl">
-            {t("persona.marketingPsychology.subtitle")}
-          </p>
+          <p className="mt-2 text-muted-foreground max-w-3xl">{t("persona.marketingPsychology.subtitle")}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[{
-              t: "Halo effect",
-              d: "Better aesthetics increase perceived competence—especially in high-stakes services.",
-            },
-            {
-              t: "Cognitive load",
-              d: "Fewer choices, clearer hierarchy, higher conversion.",
-            },
-            {
-              t: "Loss aversion",
-              d: "We frame costs of delay: missed bookings, weak trust, manual ops.",
-            }].map((x) => (
-              <Card key={x.t} className="glass rounded-2xl p-6">
-                <div className="text-sm font-semibold">{x.t}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{x.d}</div>
+            {[0, 1, 2].map((i) => (
+              <Card key={i} className="glass rounded-2xl p-6">
+                <div className="text-sm font-semibold">{t(`persona.psych.${i}.t`)}</div>
+                <div className="mt-2 text-sm text-muted-foreground">{t(`persona.psych.${i}.d`)}</div>
               </Card>
             ))}
           </div>
