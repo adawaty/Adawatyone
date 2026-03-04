@@ -255,23 +255,18 @@ export default function Home() {
         </div>
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-balance">One niche: Brand → Build → Demand (DFY, end-to-end).</h2>
-            <p className="mt-2 text-muted-foreground max-w-2xl text-balance">
-              Many vendors deliver pieces. Adawaty delivers the full system—strategy, build, content, and discoverability—so your team keeps momentum after launch.
+            <h2 className="text-2xl sm:text-3xl font-semibold text-balance">{t("home.niche.title")}</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl text-balance" style={{ unicodeBidi: "plaintext" }}>
+              {t("home.niche.subtitle")}
             </p>
           </div>
-          <Card className="glass premium-card rounded-2xl p-6">
-            <div className="text-sm font-medium">Risk reversal</div>
+          <Card className="glass premium-card rounded-2xl p-6" style={{ unicodeBidi: "plaintext" }}>
+            <div className="text-sm font-medium">{t("home.riskReversal.title")}</div>
             <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
-              {[
-                "Fixed scope per sprint (clear deliverables)",
-                "Weekly check-ins + visible progress",
-                "Handover docs and templates included",
-                "AI workflows with safety boundaries",
-              ].map((x) => (
-                <li key={x} className="flex gap-2">
+              {[0, 1, 2, 3].map((i) => (
+                <li key={i} className="flex gap-2">
                   <span className="mt-2 h-1.5 w-1.5 rounded-full bg-accent" />
-                  <span>{x}</span>
+                  <span>{t(`home.riskReversal.items.${i}`)}</span>
                 </li>
               ))}
             </ul>
@@ -284,45 +279,29 @@ export default function Home() {
       {/* Digital + Web (integrated) */}
       <section className="mt-16 section-wash-1 rounded-3xl border border-white/10 p-4 sm:p-8">
         <div className="flex items-end justify-between gap-6">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold">Digital + Web, integrated</h2>
-            <p className="mt-2 text-muted-foreground max-w-2xl text-balance">
-              Not “a website” and “marketing” as separate vendors. We build the digital experience and the demand engine together.
-            </p>
+          <div style={{ unicodeBidi: "plaintext" }}>
+            <h2 className="text-2xl sm:text-3xl font-semibold">{t("home.integrated.title")}</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl text-balance">{t("home.integrated.subtitle")}</p>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
               <Link href="/solutions">{t("home.pillars.cta")}</Link>
             </Button>
             <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-              <Link href="/for">Choose your page</Link>
+              <Link href="/for">{t("cta.choosePage")}</Link>
             </Button>
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {[{
-            t: "Experience (UI/UX)",
-            d: "Clear hierarchy, fast trust, and one primary action per section.",
-            chips: ["IA", "UX writing", "CRO"],
-          },
-          {
-            t: "Build (performance)",
-            d: "A premium site that loads fast, tracks conversions, and is easy to iterate.",
-            chips: ["Core Web Vitals", "Analytics", "Landing pages"],
-          },
-          {
-            t: "Demand (SEO + AI)",
-            d: "Content + visibility so buyers find you in Google, AI Overviews, and assistants.",
-            chips: ["AEO", "LLMSEO", "Programmatic pages"],
-          }].map((x) => (
-            <Card key={x.t} className="glass premium-card rounded-2xl p-6">
-              <div className="text-lg font-semibold">{x.t}</div>
-              <p className="mt-2 text-sm text-muted-foreground">{x.d}</p>
+        <div className="mt-8 grid gap-4 lg:grid-cols-3" style={{ unicodeBidi: "plaintext" }}>
+          {[0, 1, 2].map((i) => (
+            <Card key={i} className="glass premium-card rounded-2xl p-6">
+              <div className="text-lg font-semibold">{t(`home.integrated.cards.${i}.t`)}</div>
+              <p className="mt-2 text-sm text-muted-foreground">{t(`home.integrated.cards.${i}.d`)}</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {x.chips.map((c) => (
-                  <span key={c} className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">
-                    {c}
+                {[0, 1, 2].map((j) => (
+                  <span key={j} className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">
+                    {t(`home.integrated.cards.${i}.chips.${j}`)}
                   </span>
                 ))}
               </div>
@@ -341,7 +320,7 @@ export default function Home() {
             </p>
           </div>
           <Button asChild variant="secondary" className="hidden sm:inline-flex bg-white/6 hover:bg-white/10">
-            <Link href="/solutions">See solutions</Link>
+            <Link href="/solutions">{t("cta.seeSolutions")}</Link>
           </Button>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -350,15 +329,10 @@ export default function Home() {
             .map((s) => (
               <Card key={s.id} className="glass premium-card rounded-2xl p-6">
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-lg font-semibold">
-                      <Link href={`/services/${s.id}`} className="hover:text-primary transition-colors">
-                        {s.title}
-                      </Link>
-                    </div>
-                    <span className="text-[11px] rounded-full bg-white/6 border border-white/10 px-2 py-1 text-muted-foreground">
-                      {s.pillar}
-                    </span>
+                  <div className="text-lg font-semibold">
+                    <Link href={`/services/${s.id}`} className="hover:text-primary transition-colors">
+                      {s.title}
+                    </Link>
                   </div>
                   <span className="text-[11px] rounded-full bg-white/6 border border-white/10 px-2 py-1 text-muted-foreground">
                     {s.pillar}
