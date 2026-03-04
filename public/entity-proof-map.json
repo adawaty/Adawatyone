@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "_meta": {
+    "name": "Adawaty — Entity & Proof Map",
+    "purpose": "Cite-worthy facts and named methodologies for consistent site-wide injection.",
+    "version": "2026-03-04",
+    "rules": [
+      "Prefer verifiable, falsifiable statements.",
+      "Attach evidence_url when a public page exists.",
+      "Avoid unverifiable superlatives (e.g., #1, best)."
+    ]
+  },
+  "entity": {
+    "name": "Adawaty",
+    "type": "Organization",
+    "areaServed": ["US", "SK", "Worldwide"],
+    "registeredAddress": {
+      "country": "United States",
+      "state": "Wyoming",
+      "city": "Sheridan",
+      "postalCode": "82801",
+      "streetAddress": "30 N Gould ST Suite R"
+    },
+    "tradingAddress": {
+      "country": "Slovakia",
+      "city": "Bratislava",
+      "postalCode": "821 04",
+      "streetAddress": "Ivánska cesta 30/D, Aircraft Building"
+    }
+    "offers": [
+      "Brand Intelligence",
+      "Brand System",
+      "DFY Website",
+      "Content Engine",
+      "AI Visibility (SEO/AEO/LLMSEO)"
+    ],
+    "sameAs": []
+  },
+  "methodologies": [
+    {
+      "id": "brand-build-demand",
+      "name": "Brand → Build → Demand",
+      "one_liner": "A delivery model that ships brand clarity first, then a conversion-ready build, then demand and visibility systems.",
+      "use_when": [
+        "Rebuilding a brand + website",
+        "Launching a DFY offer",
+        "Fixing low-conversion traffic"
+      ],
+      "components": [
+        "Brand Intelligence",
+        "Brand System",
+        "DFY Website",
+        "Content Engine",
+        "AI Visibility"
+      ]
+    },
+    {
+      "id": "scope-lock-sprint",
+      "name": "Scope-Lock Sprint",
+      "one_liner": "A fixed-scope, timeboxed sprint with measurable outcomes and explicit non-goals.",
+      "claims": [
+        "Reduces scope creep by defining non-goals",
+        "Creates predictable delivery windows"
+      ]
+    },
+    {
+      "id": "one-primary-action",
+      "name": "One Primary Action UI",
+      "one_liner": "A UX rule: each screen should optimize for one primary user action to reduce cognitive load and drop-offs.",
+      "applies_to": ["Portals", "Intake flows", "Pricing/booking flows"]
+    },
+    {
+      "id": "citation-first-seo",
+      "name": "Citation-First SEO",
+      "one_liner": "An SEO/AEO approach that structures pages for extraction: clear entities, definitions, and FAQ blocks to improve citations in AI answers.",
+      "applies_to": ["AI Visibility", "Glossary pages", "Industry pages"]
+    }
+  ],
+  "proof_points": [
+    {
+      "id": "iso-ready-delivery",
+      "label": "ISO-ready delivery",
+      "type": "process",
+      "statement": "Adawaty uses documented delivery checklists and handover docs designed for ISO-aligned governance requirements.",
+      "evidence_url": "/",
+      "notes": "If you publish a dedicated process page, point evidence_url there for stronger verifiability."
+    },
+    {
+      "id": "event-tracking-standard",
+      "label": "Analytics & event tracking as standard",
+      "type": "practice",
+      "statement": "DFY Website and App Development deliverables include analytics/event tracking to measure activation, conversion, and drop-offs.",
+      "evidence_url": "/services/dfy-website"
+    },
+    {
+      "id": "ai-visibility-audit-offer",
+      "label": "Dedicated AI visibility audit",
+      "type": "offer",
+      "statement": "Adawaty provides an AI Visibility Audit page with page-specific canonical + structured data injection.",
+      "evidence_url": "/ai-visibility-audit"
+    }
+  ],
+  "reusable_snippets": {
+    "brand_build_demand": {
+      "short": "Brand → Build → Demand",
+      "long": "Brand → Build → Demand: clarify positioning, ship a conversion-ready build, then scale demand and AI visibility."
+    },
+    "ai_visibility_definition": {
+      "short": "AI Visibility (SEO/AEO/LLMSEO)",
+      "long": "AI Visibility combines SEO, AEO, and LLMSEO to increase citations and presence in Google AI Overviews and AI assistants."
+    }
+  }
+}
