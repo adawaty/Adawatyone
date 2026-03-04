@@ -12,25 +12,24 @@ import { Link } from "wouter";
 import { site } from "@/lib/content";
 import { getIndustries } from "@/lib/contentLocalized";
 import { useI18n } from "@/contexts/I18nContext";
-import { ArrowRight, Building2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2 } from "lucide-react";
 
 export default function Industries() {
-  const { lang } = useI18n();
+  const { lang, dir, t } = useI18n();
+  const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
   const industries = getIndustries(lang);
+
   return (
-    <SiteLayout
-      title="Industries"
-      subtitle="Programmatic pages designed to rank: sector-specific pains, outcomes, and the DFY pillars that solve them."
-    >
+    <SiteLayout title={t("industries.page.title")} subtitle={t("industries.page.subtitle")}>
       <SeoHead
-        title={`Industries | ${site.name}`}
-        description="Industry landing pages for e-commerce, SaaS, and real estate—built for Google search and AI Overviews with clear, cite-worthy content."
+        title={`${t("industries.page.title")} | ${site.name}`}
+        description={t("industries.page.subtitle")}
         path="/industries"
         type="website"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Industries",
+          name: t("industries.page.title"),
           url: new URL("/industries", site.url).toString(),
           isPartOf: { "@type": "WebSite", name: site.name, url: site.url },
         }}
@@ -41,15 +40,15 @@ export default function Industries() {
           {industries.map((i) => (
             <Card key={i.id} className="glass premium-card rounded-2xl p-7">
               <div className="flex items-center justify-between gap-3">
-                <Badge className="bg-white/6 border border-white/10 text-foreground">Industry page</Badge>
+                <Badge className="bg-white/6 border border-white/10 text-foreground">{t("industries.badge")}</Badge>
                 <Building2 className="h-4 w-4 text-primary" aria-hidden="true" />
               </div>
               <div className="mt-3 text-xl font-semibold">{i.title}</div>
               <p className="mt-2 text-sm text-muted-foreground">{i.summary}</p>
               <div className="mt-5">
-                <Button asChild>
+                <Button asChild className="w-full sm:w-auto">
                   <Link href={`/industries/${i.id}`}>
-                    View page <ArrowRight className="ml-2 h-4 w-4" />
+                    {t("industries.view")} <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
                   </Link>
                 </Button>
               </div>
@@ -59,15 +58,12 @@ export default function Industries() {
       </section>
 
       <section className="mt-12 pb-6">
-        <Card className="glass premium-card rounded-2xl p-7">
-          <div className="text-lg font-semibold">Why industry pages help you own results</div>
-          <p className="mt-2 text-sm text-muted-foreground max-w-3xl">
-            Google and AI Overviews reward pages that answer specific questions with clear structure. Each industry page is built
-            to match sector intent: pains, outcomes, and the exact DFY deliverables.
-          </p>
+        <Card className="glass premium-card rounded-2xl p-7" style={{ unicodeBidi: "plaintext" }}>
+          <div className="text-lg font-semibold">{t("industries.why.title")}</div>
+          <p className="mt-2 text-sm text-muted-foreground max-w-3xl">{t("industries.why.body")}</p>
           <div className="mt-5">
-            <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-              <Link href="/ai-visibility-audit">Start with an AI Visibility Audit</Link>
+            <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
+              <Link href="/ai-visibility-audit">{t("industries.why.cta")}</Link>
             </Button>
           </div>
         </Card>

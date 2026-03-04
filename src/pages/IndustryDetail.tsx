@@ -13,10 +13,16 @@ import { site } from "@/lib/content";
 import { getIndustries, getServices } from "@/lib/contentLocalized";
 import { useI18n } from "@/contexts/I18nContext";
 import NotFound from "@/pages/NotFound";
-import { ArrowRight, Target, TrendingUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, Target, TrendingUp } from "lucide-react";
+
+function formatTemplate(s: string, vars: Record<string, string>) {
+  return s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? `{${k}}`);
+}
 
 export default function IndustryDetail({ id }: { id: string }) {
-  const { lang } = useI18n();
+  const { lang, dir, t } = useI18n();
+  const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
+
   const industries = getIndustries(lang);
   const services = getServices(lang);
   const industry = industries.find((x) => x.id === id);
@@ -48,16 +54,16 @@ export default function IndustryDetail({ id }: { id: string }) {
       <section className="pt-10">
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="glass premium-card rounded-2xl p-7 lg:col-span-2">
-            <div className="flex items-center justify-between gap-3">
-              <Badge className="bg-white/6 border border-white/10 text-foreground">Sector</Badge>
-              <span className="text-xs text-primary">Programmatic landing</span>
+            <div className="flex items-center justify-between gap-3" style={{ unicodeBidi: "plaintext" }}>
+              <Badge className="bg-white/6 border border-white/10 text-foreground">{t("industry.badge")}</Badge>
+              <span className="text-xs text-primary">{t("industry.tag")}</span>
             </div>
 
             <div className="mt-6 grid gap-4 lg:grid-cols-2">
               <Card className="rounded-2xl border border-white/10 bg-white/3 p-6">
                 <div className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-primary" aria-hidden="true" />
-                  <div className="text-lg font-semibold">Common pains</div>
+                  <div className="text-lg font-semibold">{t("industry.pains")}</div>
                 </div>
                 <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
                   {industry.pains.map((p) => (
@@ -72,7 +78,7 @@ export default function IndustryDetail({ id }: { id: string }) {
               <Card className="rounded-2xl border border-white/10 bg-white/3 p-6">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-primary" aria-hidden="true" />
-                  <div className="text-lg font-semibold">Outcomes</div>
+                  <div className="text-lg font-semibold">{t("industry.outcomes")}</div>
                 </div>
                 <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
                   {industry.outcomes.map((o) => (
@@ -87,7 +93,7 @@ export default function IndustryDetail({ id }: { id: string }) {
 
             <div className="mt-6 circuit-divider" />
 
-            <div className="mt-6 text-lg font-semibold">Recommended pillars</div>
+            <div className="mt-6 text-lg font-semibold">{t("industry.recommended")}</div>
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
               {recommended.map((s) => (
                 <Card key={s.id} className="rounded-2xl border border-white/10 bg-white/3 p-6">
@@ -99,9 +105,9 @@ export default function IndustryDetail({ id }: { id: string }) {
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{s.summary}</p>
                   <div className="mt-4">
-                    <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
+                    <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
                       <Link href={`/services/${s.id}`}>
-                        View deliverables <ArrowRight className="ml-2 h-4 w-4" />
+                        {t("industry.viewDeliverables")} <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
                       </Link>
                     </Button>
                   </div>
@@ -110,19 +116,17 @@ export default function IndustryDetail({ id }: { id: string }) {
             </div>
           </Card>
 
-          <Card className="glass premium-card rounded-2xl p-7">
-            <div className="text-sm font-medium">Best starting point</div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              If you want to own Google + AI results in this sector, start with an AI Visibility Audit, then execute pillar upgrades.
-            </p>
+          <Card className="glass premium-card rounded-2xl p-7" style={{ unicodeBidi: "plaintext" }}>
+            <div className="text-sm font-medium">{t("industry.side.title")}</div>
+            <p className="mt-2 text-sm text-muted-foreground">{t("industry.side.body")}</p>
             <div className="mt-5 grid gap-2">
-              <Button asChild>
+              <Button asChild className="w-full sm:w-auto">
                 <Link href="/ai-visibility-audit">
-                  View audit page <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("industry.side.audit")} <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
                 </Link>
               </Button>
-              <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
-                <Link href="/industries">Back to industries</Link>
+              <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
+                <Link href="/industries">{t("industry.side.back")}</Link>
               </Button>
             </div>
           </Card>
@@ -130,14 +134,14 @@ export default function IndustryDetail({ id }: { id: string }) {
       </section>
 
       <section className="mt-12 pb-6">
-        <Card className="glass premium-card rounded-2xl p-7">
-          <div className="text-lg font-semibold">Ready to build demand in {industry.title}?</div>
-          <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
-            Tell us your current stage and targets. We’ll propose a DFY scope and sprint plan aligned to the buyer intent in your sector.
-          </p>
+        <Card className="glass premium-card rounded-2xl p-7" style={{ unicodeBidi: "plaintext" }}>
+          <div className="text-lg font-semibold">
+            {formatTemplate(t("industry.final.title"), { industry: industry.title })}
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground max-w-2xl">{t("industry.final.body")}</p>
           <div className="mt-5">
-            <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)]">
-              <Link href="/contact">Request scope</Link>
+            <Button asChild size="lg" className="shadow-[0_0_40px_oklch(0.73_0.16_190/0.25)] w-full sm:w-auto">
+              <Link href="/contact">{t("cta.requestScope")}</Link>
             </Button>
           </div>
         </Card>

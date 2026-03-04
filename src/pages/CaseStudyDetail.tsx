@@ -14,16 +14,17 @@ import { Link } from "wouter";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function CaseStudyDetail({ slug }: { slug: string }) {
-  const { lang } = useI18n();
+  const { lang, dir, t } = useI18n();
+  const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
   const c = getCaseStudyBySlug(lang, slug);
 
   if (!c) {
     return (
-      <SiteLayout title="Case study not found" subtitle="The link may be outdated.">
+      <SiteLayout title={t("case.notFound.title")} subtitle={t("case.notFound.subtitle")}>
         <div className="pt-10">
-          <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
+          <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
             <Link href="/work">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to work
+              <Arrow className={dir === "rtl" ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} /> {t("case.backWork")}
             </Link>
           </Button>
         </div>
@@ -48,7 +49,8 @@ export default function CaseStudyDetail({ slug }: { slug: string }) {
           publisher: { "@type": "Organization", name: site.name },
         }}
       />
-      <section className="pt-10">
+
+      <section className="pt-10" style={{ unicodeBidi: "plaintext" }}>
         <div className="flex flex-wrap items-center gap-2">
           <Badge className="bg-white/6 border border-white/10 text-foreground">{c.category}</Badge>
           <span className="text-sm text-primary">{c.highlightMetric}</span>
@@ -56,10 +58,10 @@ export default function CaseStudyDetail({ slug }: { slug: string }) {
 
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           <Card className="glass rounded-2xl p-6 lg:col-span-2">
-            <div className="text-sm font-medium">Challenge</div>
+            <div className="text-sm font-medium">{t("case.challenge")}</div>
             <p className="mt-2 text-sm text-muted-foreground">{c.challenge}</p>
 
-            <div className="mt-6 text-sm font-medium">Solution</div>
+            <div className="mt-6 text-sm font-medium">{t("case.solution")}</div>
             <ul className="mt-2 grid gap-2 text-sm text-muted-foreground">
               {c.solution.map((s) => (
                 <li key={s} className="flex gap-2">
@@ -69,7 +71,7 @@ export default function CaseStudyDetail({ slug }: { slug: string }) {
               ))}
             </ul>
 
-            <div className="mt-6 text-sm font-medium">Results</div>
+            <div className="mt-6 text-sm font-medium">{t("case.results")}</div>
             <ul className="mt-2 grid gap-2 text-sm text-muted-foreground">
               {c.results.map((r) => (
                 <li key={r} className="flex gap-2">
@@ -81,30 +83,28 @@ export default function CaseStudyDetail({ slug }: { slug: string }) {
           </Card>
 
           <Card className="glass rounded-2xl p-6">
-            <div className="text-sm font-medium">Themes</div>
+            <div className="text-sm font-medium">{t("case.themes")}</div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {c.tools.map((t) => (
-                <span key={t} className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">
-                  {t}
+              {c.tools.map((tool) => (
+                <span key={tool} className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">
+                  {tool}
                 </span>
               ))}
             </div>
 
             <div className="mt-6 circuit-divider" />
 
-            <div className="mt-6 text-sm font-medium">Want a similar outcome?</div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We can propose a turnkey DFY scope with a sprint timeline.
-            </p>
+            <div className="mt-6 text-sm font-medium">{t("case.wantSimilar")}</div>
+            <p className="mt-2 text-sm text-muted-foreground">{t("case.wantSimilar.body")}</p>
             <div className="mt-4 grid gap-2">
-              <Button asChild>
+              <Button asChild className="w-full sm:w-auto">
                 <Link href="/contact">
-                  Book a call <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("cta.book")} <ArrowRight className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
                 </Link>
               </Button>
-              <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
+              <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
                 <Link href="/work">
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                  <ArrowLeft className={dir === "rtl" ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} /> {t("case.back")}
                 </Link>
               </Button>
             </div>
