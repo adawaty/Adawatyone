@@ -277,6 +277,19 @@ export const services: Service[] = [
     ],
   },
   {
+    id: "lead-generation",
+    title: "Lead Generation (B2B Leads  Enrichment)",
+    pillar: "AI Visibility",
+    summary:
+      "High-intent lead lists under your brand: targeting, enrichment, validation, and outreach-ready exports.",
+    bullets: [
+      "ICP + filters (industry, role, geo, tech)",
+      "Data enrichment (company + decision makers)",
+      "Email verification + deliverability checks",
+      "Exports for CRM + outreach tools",
+    ],
+  },
+  {
     id: "concierge",
     title: "Concierge Growth Partner",
     pillar: "Concierge",
@@ -602,6 +615,60 @@ export const solutions: Solution[] = [
       title: "ERP-lite Workflow Systems (SME) | Adawaty",
       description:
         "Workflow-aware ERP-lite systems: dashboards, approvals, roles, pipelines, and automation—built around how your business runs.",
+    },
+  },
+  {
+    id: "lead-generation",
+    slug: "lead-generation",
+    title: "Lead Generation (B2B Lists + Enrichment)",
+    summary:
+      "Outbound-ready leads under your brand: targeting, enrichment, verification, and clean exports your team can use immediately.",
+    whoItsFor: ["Agencies", "B2B services", "Sales teams"],
+    deliverables: [
+      "ICP + filters (industry, role, geo)",
+      "Company + contact enrichment",
+      "Email verification  quality checks",
+      "CSV exports + CRM-ready fields",
+    ],
+    timeline: ["2–5 days: targeting + enrichment", "1–2 days: QA + export"],
+    integrations: ["HubSpot", "Salesforce", "Apollo", "Email tools"],
+    faqs: [
+      {
+        q: "Is this like Tomba or Kuration?",
+        a: "Similar outcome (clean lead data), delivered under your brand and tuned to your ICP, fields, and outreach workflow.",
+      },
+    ],
+    seo: {
+      title: "Lead Generation (B2B Lists + Enrichment) | Adawaty",
+      description:
+        "B2B lead generation: targeting, enrichment, verification, and outreach-ready exports under your brand.",
+    },
+  },
+  {
+    id: "education-systems",
+    slug: "education-systems",
+    title: "Education Systems (LMS  SIS  QMS)",
+    summary:
+      "Learning platforms and operations systems: LMS, Student Information Systems, and quality workflowsbuilt for adoption and reporting.",
+    whoItsFor: ["Training centers", "Schools", "Education operators"],
+    deliverables: [
+      "LMS: courses, content, assessments",
+      "SIS: students, enrollment, attendance",
+      "QMS: quality workflows, audits, reports",
+      "Dashboards + exports",
+    ],
+    timeline: ["Week 1: workflows + requirements", "Week 2–4: build + integrations", "Week 5: pilot + rollout"],
+    integrations: ["Email/SMS", "Payments", "Analytics", "Reporting"],
+    faqs: [
+      {
+        q: "Can you integrate with our current tools?",
+        a: "Yes. We map your workflow first, then integrate with the tools you already use (payments, messaging, reporting).",
+      },
+    ],
+    seo: {
+      title: "LMS, SIS  QMS Systems | Adawaty",
+      description:
+        "Education systems: LMS platforms, Student Information Systems, and Quality Management workflowsbuilt for operations and reporting.",
     },
   },
 ];

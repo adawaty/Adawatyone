@@ -22,6 +22,8 @@ import Solutions from "@/pages/Solutions";
 import SolutionDetail from "@/pages/SolutionDetail";
 import AppDevelopmentSolution from "@/pages/solutions/AppDevelopmentSolution";
 import ErpWorkflowsSolution from "@/pages/solutions/ErpWorkflowsSolution";
+import LeadGenerationSolution from "@/pages/solutions/LeadGenerationSolution";
+import EducationSystemsSolution from "@/pages/solutions/EducationSystemsSolution";
 import Glossary from "@/pages/Glossary";
 import GlossaryEntry from "@/pages/GlossaryEntry";
 import For from "@/pages/For";
@@ -44,6 +46,8 @@ function AppRouter() {
         <Route path="/solutions" component={Solutions} />
         <Route path="/solutions/app-development" component={AppDevelopmentSolution} />
         <Route path="/solutions/erp-workflows" component={ErpWorkflowsSolution} />
+        <Route path="/solutions/lead-generation" component={LeadGenerationSolution} />
+        <Route path="/solutions/education-systems" component={EducationSystemsSolution} />
         <Route path="/solutions/:slug">{(params) => <SolutionDetail slug={params.slug} />}</Route>
         <Route path="/glossary" component={Glossary} />
         <Route path="/glossary/:slug">{(params) => <GlossaryEntry slug={params.slug} />}</Route>

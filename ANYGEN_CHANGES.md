@@ -6,7 +6,7 @@ This document summarizes what was changed **from the beginning of the AnyGen wor
 > - Egyptian Arabic localization quality (dialect consistency)
 > - Mobile conversion UX improvements
 > - SEO + LLM crawler readiness (schemas, llms.txt, glossary)
-> - New solution pages using a reusable template
+> - High-intent solution pages (template-driven)
 > - Visual proof upgrades (Work thumbnails) + trust scaffolding
 > - Cairo Circuit Futurism design system consistency
 
@@ -24,7 +24,7 @@ This document summarizes what was changed **from the beginning of the AnyGen wor
 
 ### What was done
 - Completed/standardized localization coverage across key pages (Home, Services, Work, Contact, About, Industries, Pricing, Audit).
-- Enforced consistent Egyptian phrasing (e.g., avoiding overly formal MSA where a clearer Egyptian phrasing fits).
+- Enforced consistent Egyptian phrasing (avoiding overly formal MSA where a clearer Egyptian phrasing fits).
 - Reduced “English leakage” by migrating hardcoded strings into the i18n dictionary.
 - Addressed RTL punctuation issues in mixed Arabic/English segments using `unicodeBidi: "plaintext"` where needed.
 
@@ -60,7 +60,7 @@ This document summarizes what was changed **from the beginning of the AnyGen wor
   - Narrative flow: **What it is → Who it’s for → Deliverables → Timeline → Integrations → FAQs**
   - JSON-LD injection for FAQ + Service
   - Cairo Circuit Futurism styling + motion
-- Added two new high-intent solution pages:
+- Added high-intent solution pages:
   - `/solutions/app-development`
   - `/solutions/erp-workflows`
 
@@ -127,11 +127,51 @@ Files:
 
 ---
 
-## 8) Git workflow
+## 8) New offerings added
+
+### Lead Generation (Tomba/Kuration-like outcome)
+- Added a DFY offering for **B2B lead lists + enrichment + verification** under your brand.
+- Added a dedicated high-intent solution page:
+  - `/solutions/lead-generation`
+
+### Education systems
+- Added an education-ops offering that covers:
+  - **LMS (Learning Management Systems)**
+  - **SIS (Student Information Systems)**
+  - **QMS (Quality Management Systems / quality workflows)**
+- Added a dedicated solution page:
+  - `/solutions/education-systems`
+
+---
+
+## 9) Arabic copy fixes
+- Updated Arabic industry naming so **SaaS** and **E-commerce** render correctly in Arabic:
+  - SaaS → **برمجيات كخدمة (SaaS)**
+  - E-commerce → **التجارة الإلكترونية**
+- Replaced the inaccurate phrasing **"المنتج الوحش"** with outcome-first wording that matches SaaS buyer intent.
+
+---
+
+## 10) Portfolio screenshot fix (Coursatee)
+- Coursatee screenshot capture was blocked; replaced the thumbnail capture method with a stealth Playwright approach:
+  - `scripts/capture_coursatee_stealth.py`
+
+---
+
+## 11) Flow simplification
+- Added a **“Start here”** section on Home that routes users into the most common intent paths:
+  - Lead Generation
+  - Education Systems
+  - AI Visibility Audit
+
+---
+
+## 12) Git workflow
 
 ### What was done
-- Before pushing new changes, a backup branch was created on GitHub:
+- Before pushing major updates, backup branches were created on GitHub:
   - `backup/2026-03-04-pre-preloader`
+  - `backup/2026-03-04-pre-leads-lms-flow`
 
 ---
 
@@ -140,9 +180,7 @@ Files:
 1. Replace founder placeholder with a real headshot + factual bio.
 2. Replace testimonial placeholders with real quotes + names + titles.
 3. Add a dedicated **Delivery / Governance** page to substantiate “ISO-ready delivery” without implying certification.
-4. Optimize portfolio thumbnails:
-   - Curate crops
-   - Add a lightweight “device mockup frame” layer for consistency
+4. Add a lightweight device/mockup frame layer for portfolio thumbnails for visual consistency.
 
 ---
 

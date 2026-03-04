@@ -30,6 +30,9 @@ import {
   ShieldCheck,
   Timer,
   Files,
+  Users,
+  GraduationCap,
+  Bot,
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -212,6 +215,55 @@ export default function Home() {
             <Card key={x.k} className="glass premium-card rounded-2xl p-5">
               <div className="text-sm font-semibold">{x.k}</div>
               <div className="mt-1 text-sm text-muted-foreground">{x.v}</div>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Start here (simplified paths) */}
+      <section className="mt-12">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="text-xs tracking-[0.24em] uppercase text-primary/90">{t("home.flow.title")}</div>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-semibold">{t("home.flow.subtitle")}</h2>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {[{
+            icon: Users,
+            t: t("home.flow.card0.t"),
+            d: t("home.flow.card0.d"),
+            href: "/solutions/lead-generation",
+            cta: t("home.flow.card0.cta"),
+          }, {
+            icon: GraduationCap,
+            t: t("home.flow.card1.t"),
+            d: t("home.flow.card1.d"),
+            href: "/solutions/education-systems",
+            cta: t("home.flow.card1.cta"),
+          }, {
+            icon: Bot,
+            t: t("home.flow.card2.t"),
+            d: t("home.flow.card2.d"),
+            href: "/ai-visibility-audit",
+            cta: t("home.flow.card2.cta"),
+          }].map((x) => (
+            <Card key={x.t} className="glass premium-card rounded-2xl p-6">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 h-10 w-10 rounded-xl bg-white/6 border border-white/10 grid place-items-center">
+                  <x.icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold" style={{ unicodeBidi: "plaintext" }}>{x.t}</div>
+                  <div className="mt-1.5 text-sm text-muted-foreground" style={{ unicodeBidi: "plaintext" }}>{x.d}</div>
+                  <div className="mt-4">
+                    <Button asChild variant="secondary" className="bg-white/6 hover:bg-white/10">
+                      <Link href={x.href}>{x.cta}</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </Card>
           ))}
         </div>

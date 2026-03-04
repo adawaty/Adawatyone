@@ -556,6 +556,18 @@ const dictionaries: Record<Lang, Dict> = {
 
     "home.howWeWork.title": "How we work",
 
+    "home.flow.title": "Start here",
+    "home.flow.subtitle": "Pick your fastest path to a measurable outcome.",
+    "home.flow.card0.t": "Need qualified leads?",
+    "home.flow.card0.d": "Targeted B2B lists + enrichment under your brand — outreach-ready exports.",
+    "home.flow.card0.cta": "See lead generation",
+    "home.flow.card1.t": "Running education ops?",
+    "home.flow.card1.d": "LMS + SIS + QMS workflows — built for adoption and reporting.",
+    "home.flow.card1.cta": "See education systems",
+    "home.flow.card2.t": "Want Googles AI to cite you?",
+    "home.flow.card2.d": "Audit and upgrade entity clarity + answer structure so assistants recommend you first.",
+    "home.flow.card2.cta": "Run AI visibility audit",
+
     "for.title": "High-stakes services and ambitious operators.",
     "for.subtitle": "Same DFY system. Different realities. Choose your page to see outcomes, solutions, and step-by-step delivery.",
     "for.cta": "Book a call",
@@ -1209,6 +1221,18 @@ const dictionaries: Record<Lang, Dict> = {
     "contact.direct.hoursValue": "الأحد–الخميس، 9:00–18:00",
 
     "home.howWeWork.title": "بنشتغل إزاي؟",
+
+    "home.flow.title": "ابدأ من هنا",
+    "home.flow.subtitle": "اختار أسرع طريق لنتيجة قابلة للقياس.",
+    "home.flow.card0.t": "محتاج ليدز جد؟",
+    "home.flow.card0.d": "قوائم ليدز B2B + Enrichment تحت براندك — Exports جاهزة للأوتريتش.",
+    "home.flow.card0.cta": "شوف خدمة الليدز",
+    "home.flow.card1.t": "شغال تعليم/مركز تدريب؟",
+    "home.flow.card1.d": "LMS + SIS + QMS — Workflows معمولة للاستخدام والتقارير.",
+    "home.flow.card1.cta": "شوف أنظمة التعليم",
+    "home.flow.card2.t": "عايز الـAI يقتبس منك؟",
+    "home.flow.card2.d": "تقييم + ترقيات لوضوح الكيان وبنية الإجابة عشان الـAI يرشحك الأول.",
+    "home.flow.card2.cta": "اعمل تقييم ظهور AI",
 
     "for.title": "خدمات حساسة وناس بتكبر بجد.",
     "for.subtitle": "نفس نظام DFY… بس واقع مختلف. اختار صفحتك وشوف النتايج والحلول وخطوة بخطوة.",

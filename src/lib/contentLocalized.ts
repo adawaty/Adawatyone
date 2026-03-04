@@ -251,20 +251,25 @@ const patches: Record<Exclude<Lang, "en">, {
         summary: "تطلع في جوجل وكمان في أنظمة المساعدة بالذكاء.",
         bullets: ["On-page SEO + تكنيكال", "AEO: أسئلة بصياغة بشرية", "Audit + مقارنة منافسين", "متابعة mentions/citations"],
       },
+      "lead-generation": {
+        title: "ليدز B2B (تارجتينج + Enrichment)",
+        summary: "قوائم ليدز عالية النية تحت براندك: تارجتينج، Enrichment، تحقق من الإيميلات، وExports جاهزة للأوتريتش.",
+        bullets: ["ICP + فلترة (صناعة/وظيفة/دولة)", "Enrichment (شركة + أصحاب قرار)", "تحقق من الإيميلات + Deliverability", "Export للـCRM وأدوات الأوتريتش"],
+      },
       concierge: {
-        title: "Concierge Partner",
+        title: "شريك كونسيرج (متابعة VIP)",
         summary: "متابعة VIP بعد الإطلاق: تحديثات وتجارب وتحسين مستمر.",
         bullets: ["تحديثات وتجارب سريعة", "Roadmap شهري", "دورات تحسين SEO/كونتنت", "توثيق وحوكمة"],
       },
     },
     industries: {
       ecommerce: {
-        title: "E-commerce",
-        summary: "تحويل الزيارات لثقة وشراء — UX + محتوى + ظهور في عصر الـAI.",
+        title: "التجارة الإلكترونية",
+        summary: "حوّل الترافيك لمبيعات: تجربة شراء أسرع، صفحات تحويل، ومحتوى يرد على أسئلة العميل — مع ظهور قوي في عصر الـAI.",
       },
       saas: {
-        title: "SaaS",
-        summary: "تمركز وطلب يخلي المنتج الوِحِش يبقى واضح — وبعدين scale بالكونتنت.",
+        title: "برمجيات كخدمة (SaaS)",
+        summary: "حوّل منتج SaaS المعقد لقرار شراء واضح — تمركز ورسائل وموقع يحوّل، وبعدها نمو بالكونتنت والظهور في الـAI.",
       },
       "real-estate": {
         title: "عقارات",
@@ -430,6 +435,8 @@ const patches: Record<Exclude<Lang, "en">, {
       "bio-pages": { title: "Bio Pages (صفحة شخصية بتبيع)" },
       "scheduling-intake": { title: "حجز + Intake" },
       "erp-workflows": { title: "ERP-lite (سيستم ماشي مع شغلك)" },
+      "lead-generation": { title: "ليدز B2B (قوائم + Enrichment)" },
+      "education-systems": { title: "أنظمة تعليم (LMS  SIS  QMS)" },
     },
     audiences: {
       personal: { title: "براند شخصي" },
