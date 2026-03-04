@@ -50,7 +50,7 @@ export default function Home() {
     	<SiteLayout>
       <SeoHead
         title={`${site.name} | DFY Branding, Web & AI Visibility`}
-        description="Adawaty is a DFY studio delivering Brand → Build → Demand: positioning, identity, premium websites, apps, content workflows, and Search + AI Visibility (SEO/AEO/LLMSEO)."
+        description={t("home.seo.description")}
         path="/"
         type="website"
         jsonLd={[
@@ -554,16 +554,16 @@ export default function Home() {
       {/* Final CTA */}
       <section className="mt-16 diag-bottom rounded-3xl bg-gradient-to-b from-white/6 to-white/2 border border-white/10">
         <div className="px-6 py-14 sm:px-10">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-balance">Ready for a turnkey upgrade?</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-balance">{t("home.turnkey.title")}</h2>
           <p className="mt-2 text-muted-foreground max-w-2xl">
             Tell us what you want to launch or improve. We’ll propose a DFY scope with a sprint timeline and clear deliverables.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <Link href="/contact">Start the conversation</Link>
+              <Link href="/contact">{t("home.turnkey.ctaPrimary")}</Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="bg-white/6 hover:bg-white/10">
-              <Link href="/services">Explore services</Link>
+              <Link href="/services">{t("home.turnkey.ctaSecondary")}</Link>
             </Button>
           </div>
         </div>

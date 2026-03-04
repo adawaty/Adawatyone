@@ -11,6 +11,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { Search, Workflow, Layers, Sparkles, ShieldCheck, Rocket } from "lucide-react";
 
 export default function Solutions() {
   const { lang, t } = useI18n();
@@ -112,12 +113,23 @@ export default function Solutions() {
                 t: t("solutions.stepPost.t"),
                 d: t("solutions.stepPost.d"),
               },
-            ].map((x) => (
-              <Card key={x.t} className="glass premium-card rounded-2xl p-6">
-                <div className="text-sm font-semibold">{x.t}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{x.d}</div>
-              </Card>
-            ))}
+            ].map((x, idx) => {
+              const icons = [Search, Layers, Workflow, ShieldCheck, Sparkles, Rocket] as const;
+              const Icon = icons[idx] ?? Sparkles;
+              return (
+                <Card key={x.t} className="glass premium-card rounded-2xl p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 h-9 w-9 rounded-xl bg-white/6 border border-white/10 grid place-items-center">
+                      <Icon className="h-4 w-4 text-primary" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold">{x.t}</div>
+                      <div className="mt-1.5 text-sm text-muted-foreground">{x.d}</div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </main>

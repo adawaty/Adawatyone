@@ -58,7 +58,7 @@ export default function SolutionDetail({ slug }: { slug: string }) {
     name: s.title,
     description: s.summary,
     provider: { "@type": "Organization", name: site.name, url: site.url },
-    areaServed: "EG",
+    areaServed: "Worldwide",
   };
 
   const breadcrumbJsonLd = {

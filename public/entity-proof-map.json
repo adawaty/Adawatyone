@@ -26,7 +26,7 @@
       "city": "Bratislava",
       "postalCode": "821 04",
       "streetAddress": "Ivánska cesta 30/D, Aircraft Building"
-    }
+    },
     "offers": [
       "Brand Intelligence",
       "Brand System",
@@ -77,6 +77,20 @@
     }
   ],
   "proof_points": [
+    {
+      "id": "registered-address",
+      "label": "Registered address",
+      "type": "entity_fact",
+      "statement": "Adawaty’s registered address is in Sheridan, Wyoming, United States (30 N Gould St Suite R, 82801).",
+      "evidence_url": null
+    },
+    {
+      "id": "trading-address",
+      "label": "Trading address",
+      "type": "entity_fact",
+      "statement": "Adawaty has a trading address in Bratislava, Slovakia (Ivánska cesta 30/D, Aircraft Building, 821 04).",
+      "evidence_url": null
+    },
     {
       "id": "iso-ready-delivery",
       "label": "ISO-ready delivery",

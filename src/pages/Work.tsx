@@ -10,6 +10,21 @@ Mobile goals:
 import SiteLayout from "@/components/SiteLayout";
 import SeoHead from "@/components/SeoHead";
 import { site, clients } from "@/lib/content";
+
+// Real portfolio thumbnails captured from client sites (lightweight, visual proof)
+import tMeteory from "@/assets/portfolio/client-meteory.png";
+import tSparx from "@/assets/portfolio/client-sparx.png";
+import tAltawfeek from "@/assets/portfolio/client-altawfeek.png";
+import tDnc from "@/assets/portfolio/client-dnc.png";
+import t3a from "@/assets/portfolio/client-3a.png";
+import tTawplast from "@/assets/portfolio/client-tawplast.png";
+import tCrownycup from "@/assets/portfolio/client-crownycup.png";
+import tEtehad from "@/assets/portfolio/client-el-etehad.png";
+import tEgyspring from "@/assets/portfolio/client-egyspring.png";
+import tNextsupply from "@/assets/portfolio/client-nextsupply.png";
+import tHostocta from "@/assets/portfolio/client-hostocta.png";
+import tBello from "@/assets/portfolio/client-bello-food.png";
+import tCoursatee from "@/assets/portfolio/client-coursatee.png";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +39,22 @@ function cx(...classes: Array<string | false | null | undefined>) {
 
 export default function Work() {
   const { lang, dir, t } = useI18n();
+
+  const thumbs: Record<string, string> = {
+    meteory: tMeteory,
+    sparx: tSparx,
+    altawfeek: tAltawfeek,
+    dnc: tDnc,
+    "3a": t3a,
+    tawplast: tTawplast,
+    crownycup: tCrownycup,
+    "el-etehad": tEtehad,
+    egyspring: tEgyspring,
+    nextsupply: tNextsupply,
+    hostocta: tHostocta,
+    "bello-food": tBello,
+    coursatee: tCoursatee,
+  };
   const caseStudies = getCaseStudies(lang);
   const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
 
@@ -70,7 +101,7 @@ export default function Work() {
                   {t(`client.sector.${g.sector}`)}
                 </div>
 
-                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                <div className="mt-2 grid gap-3 sm:grid-cols-2">
                   {g.items.map((c) => (
                     <a
                       key={c.id}
@@ -78,12 +109,34 @@ export default function Work() {
                       target="_blank"
                       rel="noreferrer"
                       className={cx(
-                        "group rounded-xl border border-white/10 bg-white/4 p-3 transition-colors hover:bg-white/8",
+                        "group overflow-hidden rounded-2xl border border-white/10 bg-white/3 transition-colors hover:bg-white/6",
                         dir === "rtl" ? "text-right" : "text-left"
                       )}
                     >
-                      <div className="text-sm font-medium leading-snug">{c.name}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">{t(`client.industry.${c.id}`)}</div>
+                      <div className="relative aspect-[16/10] overflow-hidden bg-black/20">
+                        {thumbs[c.id] ? (
+                          <img
+                            src={thumbs[c.id]}
+                            alt={`${c.name} website thumbnail`}
+                            className="h-full w-full object-cover opacity-95 transition-transform duration-500 group-hover:scale-[1.02]"
+                            style={{ objectPosition: "50% 24%" }}
+                            loading="lazy"
+                          />
+                        ) : null}
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
+                      </div>
+
+                      <div className="p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="text-sm font-semibold leading-snug truncate">{c.name}</div>
+                            <div className="mt-1 text-xs text-muted-foreground line-clamp-2">{t(`client.industry.${c.id}`)}</div>
+                          </div>
+                          <span className="text-[11px] shrink-0 rounded-full bg-white/6 border border-white/10 px-2 py-1 text-muted-foreground">
+                            {t("work.clients.live")}
+                          </span>
+                        </div>
+                      </div>
                     </a>
                   ))}
                 </div>

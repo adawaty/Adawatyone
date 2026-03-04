@@ -10,18 +10,18 @@ export default function BrandBuildDemandDiagram({
 }: {
   className?: string;
 }) {
-  const { dir } = useI18n();
+  const { dir, t } = useI18n();
   const flip = dir === "rtl";
   return (
     <svg
       className={className}
       viewBox="0 0 900 160"
       role="img"
-      aria-label="Brand to Build to Demand system diagram"
+      aria-label={t("diagram.bbd.aria")}
       style={flip ? { transform: "scaleX(-1)" } : undefined}
     >
-      <title>Brand → Build → Demand</title>
-      <desc>Three-step system: Brand, Build, Demand with arrows between.</desc>
+      <title>{t("diagram.bbd.title")}</title>
+      <desc>{t("diagram.bbd.desc")}</desc>
 
       <defs>
         <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
@@ -52,9 +52,11 @@ export default function BrandBuildDemandDiagram({
       <path d="M 665 80 L 650 70 L 650 90 Z" fill="oklch(0.78 0.16 80)" />
 
       {/* nodes */}
-      {[{ x: 40, label: "Brand", sub: "Positioning • identity" },
-        { x: 340, label: "Build", sub: "Website • conversion" },
-        { x: 640, label: "Demand", sub: "Content • AI visibility" }].map((n) => (
+      {[
+        { x: 40, label: t("diagram.bbd.brand"), sub: t("diagram.bbd.brandSub") },
+        { x: 340, label: t("diagram.bbd.build"), sub: t("diagram.bbd.buildSub") },
+        { x: 640, label: t("diagram.bbd.demand"), sub: t("diagram.bbd.demandSub") },
+      ].map((n) => (
         <g key={n.label} transform={`translate(${n.x} 28)`}>
           <rect width="240" height="104" rx="22" fill="oklch(0.20 0.02 250 / 0.65)" stroke="oklch(0.85 0 0 / 0.12)" />
           <text

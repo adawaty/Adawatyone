@@ -24,6 +24,62 @@ const dictionaries: Record<Lang, Dict> = {
     "nav.pricingCalc": "Pricing calculator",
     "nav.home": "Home",
 
+    "a11y.toggleMenu": "Toggle menu",
+    "a11y.close": "Close",
+    "header.isoReady": "ISO-ready delivery",
+    "header.tagline": "Brand → Build → Demand",
+
+    "footer.description": "Elite DFY studio delivering Brand → Build → Demand: positioning, identity, premium websites, content workflows, and Search + AI Visibility.",
+    "footer.email": "Email",
+    "footer.call": "Call",
+    "footer.studio": "Studio",
+    "footer.getStarted": "Get started",
+    "footer.about": "About",
+    "footer.work": "Work",
+    "footer.industries": "Industries",
+    "footer.contact": "Contact",
+    "footer.rights": "All rights reserved.",
+    "footer.tagline": "Brand → Build → Demand. DFY for founders and teams.",
+
+    "home.turnkey.title": "Ready for a turnkey upgrade?",
+    "home.turnkey.ctaPrimary": "Start the conversation",
+    "home.turnkey.ctaSecondary": "Explore services",
+    "home.seo.description": "Adawaty is a DFY studio delivering Brand → Build → Demand: positioning, identity, premium websites, apps, content workflows, and Search + AI Visibility (SEO/AEO/LLMSEO).",
+
+    "preloader.aria": "System initialization",
+    "preloader.eyebrow": "System",
+    "preloader.title": "System Initialization",
+    "preloader.subtitle": "Booting DFY delivery circuits…",
+
+    "glossary.badge": "Glossary",
+    "glossary.hub.title": "What these terms mean",
+    "glossary.hub.subtitle": "Short, extractable definitions designed for AI crawlers and decision-makers.",
+    "glossary.notFound.title": "Not found",
+    "glossary.notFound.subtitle": "This glossary entry doesn’t exist.",
+    "glossary.notFound.back": "Back to glossary",
+    "glossary.cta.audit": "Run AI Visibility Audit",
+    "glossary.cta.service": "AI Visibility service",
+    "glossary.keyPoints": "Key points",
+    "glossary.definition": "Definition:",
+    "glossary.synonyms": "Synonyms:",
+    "glossary.related": "Related:",
+    "glossary.sources": "Sources",
+    "glossary.sources.fallback": "Internal definitions + delivery docs.",
+    "glossary.relatedEntries": "Related glossary entries",
+
+    "errorBoundary.title": "Something went wrong",
+    "errorBoundary.reload": "Reload Page",
+
+    "diagram.bbd.aria": "Brand to Build to Demand system diagram",
+    "diagram.bbd.title": "Brand → Build → Demand",
+    "diagram.bbd.desc": "Three-step system: Brand, Build, Demand with arrows between.",
+    "diagram.bbd.brand": "Brand",
+    "diagram.bbd.brandSub": "Positioning • identity",
+    "diagram.bbd.build": "Build",
+    "diagram.bbd.buildSub": "Website • conversion",
+    "diagram.bbd.demand": "Demand",
+    "diagram.bbd.demandSub": "Content • AI visibility",
+
     "industries.page.title": "Industries",
     "industries.page.subtitle": "Programmatic pages designed to rank: sector-specific pains, outcomes, and the DFY pillars that solve them.",
     "industries.badge": "Industry page",
@@ -167,7 +223,7 @@ const dictionaries: Record<Lang, Dict> = {
 
     "services.pillar.aiVisibility.eyebrow": "Discover",
     "services.pillar.aiVisibility.title": "AI Visibility",
-    "services.pillar.aiVisibility.note": "SEO + AEO + LLMSEO so you show up in search and AI answers.",
+    "services.pillar.aiVisibility.note": "AI Visibility (SEO/AEO/LLMSEO): structure your site so Google’s AI and assistants can recommend youand buyers trust the answer.",
 
     "services.pillar.concierge.eyebrow": "Ongoing",
     "services.pillar.concierge.title": "Concierge",
@@ -403,6 +459,8 @@ const dictionaries: Record<Lang, Dict> = {
     "work.page.subtitle": "Examples of outcomes: clarity, systems, premium execution. Includes selected clients (with industry notes).",
     "work.clients.title": "Selected clients",
     "work.clients.note": "Segmented by industry so prospects instantly recognize context.",
+    "work.clients.live": "Live",
+
     "work.caseStudy.view": "View case study",
 
     "client.sector.Engineering": "Engineering",
@@ -452,6 +510,24 @@ const dictionaries: Record<Lang, Dict> = {
     "about.serve.list.0": "Founders, executives, creators",
     "about.serve.list.1": "Product and service businesses",
     "about.serve.list.2": "Teams that need scalable systems",
+
+    "about.founder.title": "Who’s behind Adawaty",
+    "about.founder.subtitle": "High-ticket DFY work requires trust. Here’s the person accountable for delivery.",
+    "about.founder.name": "Founder (add name)",
+    "about.founder.role": "Principal delivery  strategy  build  AI visibility",
+    "about.founder.body": "Add a real founder bio + headshot here. Keep it factual: background, specialties, and what clients can expect during delivery.",
+
+    "about.testimonials.title": "What founders say",
+    "about.testimonials.subtitle": "Replace these placeholders with real quotes, names, titles, and headshots for maximum trust.",
+    "about.testimonials.0.q": "\"The delivery was structured and fastwe always knew what was happening next.\"",
+    "about.testimonials.0.n": "Client name",
+    "about.testimonials.0.t": "Title, Company",
+    "about.testimonials.1.q": "\"The new site increased qualified inquiries within weeks.\"",
+    "about.testimonials.1.n": "Client name",
+    "about.testimonials.1.t": "Title, Company",
+    "about.testimonials.2.q": "\"We finally have a workflow system the team actually uses.\"",
+    "about.testimonials.2.n": "Client name",
+    "about.testimonials.2.t": "Title, Company",
 
     "contact.page.title": "Contact",
     "contact.page.subtitle": "Tell us what you want to launch or improve. We’ll reply with a clear next step and a DFY scope proposal.",
@@ -599,6 +675,63 @@ const dictionaries: Record<Lang, Dict> = {
     "nav.pricing": "الأسعار",
     "nav.aiAudit": "تقييم الظهور في الـAI",
     "nav.pricingCalc": "حاسبة الأسعار",
+    "nav.home": "الرئيسية",
+
+    "a11y.toggleMenu": "فتح/قفل القائمة",
+    "a11y.close": "إغلاق",
+    "header.isoReady": "تسليم جاهز للـISO",
+    "header.tagline": "براند → تنفيذ → طلب",
+
+    "footer.description": "استوديو DFY بيقدّم براند → تنفيذ → طلب: تموضع وهوية ومواقع بريميوم وكونتنت سيستم وظهور في البحث والـAI.",
+    "footer.email": "إيميل",
+    "footer.call": "اتصال",
+    "footer.studio": "الاستوديو",
+    "footer.getStarted": "ابدأ",
+    "footer.about": "عنّا",
+    "footer.work": "أعمالنا",
+    "footer.industries": "القطاعات",
+    "footer.contact": "تواصل",
+    "footer.rights": "كل الحقوق محفوظة.",
+    "footer.tagline": "براند → تنفيذ → طلب. DFY للمؤسسين والفرق.",
+
+    "home.turnkey.title": "جاهز لابجريد DFY كامل؟",
+    "home.turnkey.ctaPrimary": "ابدأ الكلام",
+    "home.turnkey.ctaSecondary": "شوف الخدمات",
+    "home.seo.description": "Adawaty استوديو DFY بيقدّم براند → تنفيذ → طلب: تموضع وهوية ومواقع بريميوم وتطبيقات وكونتنت سيستم وظهور في البحث والـAI (SEO/AEO/LLMSEO).",
+
+    "preloader.aria": "تهيئة النظام",
+    "preloader.eyebrow": "النظام",
+    "preloader.title": "تهيئة النظام",
+    "preloader.subtitle": "بنجهّز دوائر تسليم DFY…",
+
+    "glossary.badge": "مصطلحات",
+    "glossary.hub.title": "يعني إيه المصطلحات دي؟",
+    "glossary.hub.subtitle": "تعريفات قصيرة وواضحة معمولة عشان الـAI والقرار السريع.",
+    "glossary.notFound.title": "مش موجود",
+    "glossary.notFound.subtitle": "الصفحة دي مش موجودة في المصطلحات.",
+    "glossary.notFound.back": "ارجع للمصطلحات",
+    "glossary.cta.audit": "اعمل تقييم ظهور AI",
+    "glossary.cta.service": "خدمة الظهور في الـAI",
+    "glossary.keyPoints": "نقط أساسية",
+    "glossary.definition": "التعريف:",
+    "glossary.synonyms": "مرادفات:",
+    "glossary.related": "مرتبط بـ:",
+    "glossary.sources": "مصادر",
+    "glossary.sources.fallback": "تعريفات داخلية + مستندات التسليم.",
+    "glossary.relatedEntries": "مصطلحات مرتبطة",
+
+    "errorBoundary.title": "حصلت مشكلة",
+    "errorBoundary.reload": "إعادة تحميل الصفحة",
+
+    "diagram.bbd.aria": "رسم توضيحي لنظام براند → تنفيذ → طلب",
+    "diagram.bbd.title": "براند → تنفيذ → طلب",
+    "diagram.bbd.desc": "نظام من 3 خطوات: براند، تنفيذ، طلب مع أسهم بينهم.",
+    "diagram.bbd.brand": "براند",
+    "diagram.bbd.brandSub": "تموضع • هوية",
+    "diagram.bbd.build": "تنفيذ",
+    "diagram.bbd.buildSub": "موقع • تحويلات",
+    "diagram.bbd.demand": "طلب",
+    "diagram.bbd.demandSub": "كونتنت • ظهور AI",
 
     "industries.page.title": "القطاعات",
     "industries.page.subtitle": "صفحات معمولة عشان تتصدر: مشاكل كل قطاع، النتايج، وركايز DFY اللي بتحلها.",
@@ -705,7 +838,6 @@ const dictionaries: Record<Lang, Dict> = {
 
     "cta.book": "احجز مكالمة",
     "mobile.safeNote": "خطوات واضحة. نطاق ثابت. وإنت ماسك الشغل بعد التسليم.",
-    "nav.home": "الرئيسية",
 
     "services.page.title": "الخدمات",
     "services.page.subtitle": "نظام DFY بريميوم: براند ← بناء ← طلب. تسليم بمراحل واضحة، توثيق، وتمكين AI + ظهور.",
@@ -730,7 +862,7 @@ const dictionaries: Record<Lang, Dict> = {
 
     "services.pillar.aiVisibility.eyebrow": "ظهور",
     "services.pillar.aiVisibility.title": "ظهور في البحث والـAI",
-    "services.pillar.aiVisibility.note": "SEO + AEO + LLMSEO عشان تظهر في جوجل وكمان في إجابات الـAI.",
+    "services.pillar.aiVisibility.note": "ظهور AI (SEO/AEO/LLMSEO): بنرتّب موقعك عشان جوجل والـAI يرشحوك الأولوالعميل يثق في الإجابة.",
 
     "services.pillar.concierge.eyebrow": "متابعة",
     "services.pillar.concierge.title": "شريك متابعة",
@@ -981,6 +1113,8 @@ const dictionaries: Record<Lang, Dict> = {
     "work.page.subtitle": "أمثلة على نتايج: وضوح، سيستمز، وتنفيذ بريميوم. ومعاهم عملاء مختارين (ومجال كل عميل).",
     "work.clients.title": "عملاء مختارين",
     "work.clients.note": "مقسّمين حسب المجال عشان العميل يلقط السياق بسرعة.",
+    "work.clients.live": "لايف",
+
     "work.caseStudy.view": "شوف القصة",
 
     "client.sector.Engineering": "هندسة",
@@ -1030,6 +1164,24 @@ const dictionaries: Record<Lang, Dict> = {
     "about.serve.list.0": "مؤسسين، مديرين، صناع محتوى",
     "about.serve.list.1": "شركات منتجات وخدمات",
     "about.serve.list.2": "فرق محتاجة سيستمز قابلة للتوسّع",
+
+    "about.founder.title": "مين ورا Adawaty؟",
+    "about.founder.subtitle": "الخدمات الـDFY العالية السعر بتحتاج ثقة. هنا الشخص المسؤول عن التسليم.",
+    "about.founder.name": "المؤسس (ضيف الاسم)",
+    "about.founder.role": "مسؤول التسليم  الاستراتيجية  التنفيذ  الظهور في الـAI",
+    "about.founder.body": "ضيف هنا نبذة حقيقية وصورة للمؤسس. خليك واقعي: خبرة، تخصصات، وإيه اللي العميل يتوقعه أثناء التنفيذ.",
+
+    "about.testimonials.title": "بيقولوا إيه؟",
+    "about.testimonials.subtitle": "بدّل الأمثلة دي باقتباسات حقيقية + أسماء + مناصب + صور عشان الثقة تزيد.",
+    "about.testimonials.0.q": "\"التسليم كان منظم وسريعكنا دايمًا فاهمين الخطوة الجاية.\"",
+    "about.testimonials.0.n": "اسم العميل",
+    "about.testimonials.0.t": "المنصب، الشركة",
+    "about.testimonials.1.q": "\"الموقع الجديد زوّد الاستفسارات الجادة في أسابيع.\"",
+    "about.testimonials.1.n": "اسم العميل",
+    "about.testimonials.1.t": "المنصب، الشركة",
+    "about.testimonials.2.q": "\"بقينا عندنا سيستم شغل الفريق فعلاً بيستخدمه.\"",
+    "about.testimonials.2.n": "اسم العميل",
+    "about.testimonials.2.t": "المنصب، الشركة",
 
     "contact.page.title": "تواصل",
     "contact.page.subtitle": "قولنا إنت عايز تطلق إيه أو تطوّر إيه. هنرد عليك بخطوة واضحة وباقتراح نطاق DFY.",
@@ -1121,7 +1273,7 @@ type I18nCtx = {
   t: (key: string) => string;
 };
 
-const I18nContext = createContext<I18nCtx | null>(null);
+export const I18nContext = createContext<I18nCtx | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => detectInitialLang());

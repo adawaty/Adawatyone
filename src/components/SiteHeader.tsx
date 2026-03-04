@@ -34,7 +34,7 @@ export default function SiteHeader() {
           <div className="flex h-10 items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1 rounded-full bg-white/6 border border-white/10 px-2 py-1">
-                <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> ISO-ready delivery
+                <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> {t("header.isoReady")}
               </span>
               <a className="premium-focus hover:text-foreground" href="mailto:alazzeh.ml@gmail.com">alazzeh.ml@gmail.com</a>
               <span className="opacity-50">•</span>
@@ -60,7 +60,7 @@ export default function SiteHeader() {
               </div>
               <div className="leading-tight">
                 <div className="font-semibold tracking-tight">Adawaty</div>
-                <div className="text-xs text-muted-foreground -mt-0.5">Brand → Build → Demand</div>
+                <div className="text-xs text-muted-foreground -mt-0.5">{t("header.tagline")}</div>
               </div>
             </Link>
 
@@ -100,7 +100,7 @@ export default function SiteHeader() {
                 size="icon"
                 className="md:hidden h-9 w-9 rounded-full bg-white/5 hover:bg-white/10"
                 onClick={() => setOpen((v) => !v)}
-                aria-label="Toggle menu"
+                aria-label={t("a11y.toggleMenu")}
               >
                 <Menu className="h-5 w-5" />
               </Button>

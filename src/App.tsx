@@ -6,8 +6,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Router, Route, Switch } from "wouter";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import Preloader from "@/components/Preloader";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { I18nProvider } from "@/contexts/I18nContext";
+import { useState } from "react";
 
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
@@ -18,6 +20,10 @@ import IndustryDetail from "@/pages/IndustryDetail";
 import PricingCalculator from "@/pages/PricingCalculator";
 import Solutions from "@/pages/Solutions";
 import SolutionDetail from "@/pages/SolutionDetail";
+import AppDevelopmentSolution from "@/pages/solutions/AppDevelopmentSolution";
+import ErpWorkflowsSolution from "@/pages/solutions/ErpWorkflowsSolution";
+import Glossary from "@/pages/Glossary";
+import GlossaryEntry from "@/pages/GlossaryEntry";
 import For from "@/pages/For";
 import PersonaDetail from "@/pages/PersonaDetail";
 import Work from "@/pages/Work";
@@ -36,7 +42,11 @@ function AppRouter() {
         <Route path="/dist/index.html" component={Home} />
         <Route path="/services" component={Services} />
         <Route path="/solutions" component={Solutions} />
+        <Route path="/solutions/app-development" component={AppDevelopmentSolution} />
+        <Route path="/solutions/erp-workflows" component={ErpWorkflowsSolution} />
         <Route path="/solutions/:slug">{(params) => <SolutionDetail slug={params.slug} />}</Route>
+        <Route path="/glossary" component={Glossary} />
+        <Route path="/glossary/:slug">{(params) => <GlossaryEntry slug={params.slug} />}</Route>
         <Route path="/for" component={For} />
         <Route path="/for/:slug">{(params) => <PersonaDetail slug={params.slug} />}</Route>
         <Route path="/industries" component={Industries} />
@@ -55,10 +65,23 @@ function AppRouter() {
 }
 
 export default function App() {
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem("adawaty_preload_done") !== "1";
+  });
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <I18nProvider>
+          {showPreloader ? (
+            <Preloader
+              onDone={() => {
+                sessionStorage.setItem("adawaty_preload_done", "1");
+                setShowPreloader(false);
+              }}
+            />
+          ) : null}
           <TooltipProvider>
             <Toaster />
             <AppRouter />
