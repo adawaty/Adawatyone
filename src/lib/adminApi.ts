@@ -93,7 +93,7 @@ export async function fetchLeads(params: {
   if (params.limit) qs.set("limit", String(params.limit));
   if (params.offset) qs.set("offset", String(params.offset));
 
-  return jsonFetch(`/api/admin/leads?${qs.toString()}`, {
+  return jsonFetch(`/api/admin-leads?${qs.toString()}`, {
     headers: {
       "x-admin-pin": pin ?? "",
     },

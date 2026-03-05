@@ -22,7 +22,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { getServices } from "@/lib/contentLocalized";
 
 const STATUS_OPTIONS = [
-  { v: "", labelEn: "All", labelAr: "الكل" },
+  { v: "all", labelEn: "All", labelAr: "الكل" },
   { v: "new", labelEn: "New", labelAr: "جديد" },
   { v: "contacted", labelEn: "Contacted", labelAr: "تم التواصل" },
   { v: "qualified", labelEn: "Qualified", labelAr: "مؤهل" },
@@ -45,8 +45,8 @@ export default function AdminLeads() {
   const [pin, setPin] = useState("");
   const [authed, setAuthed] = useState(false);
 
-  const [status, setStatus] = useState<string>("");
-  const [serviceInterest, setServiceInterest] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
+  const [serviceInterest, setServiceInterest] = useState<string>("all");
 
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<LeadItem[]>([]);
@@ -68,7 +68,11 @@ export default function AdminLeads() {
 
   async function load() {
     setLoading(true);
-    const res = await fetchLeads({ status: status || undefined, service_interest: serviceInterest || undefined, limit: 200 });
+    const res = await fetchLeads({
+      status: status === "all" ? undefined : status,
+      service_interest: serviceInterest === "all" ? undefined : serviceInterest,
+      limit: 200,
+    });
     setLoading(false);
     if (!res.ok) {
       setAuthed(false);
@@ -137,7 +141,7 @@ export default function AdminLeads() {
                       </SelectTrigger>
                       <SelectContent>
                         {STATUS_OPTIONS.map((o) => (
-                          <SelectItem key={o.v || "all"} value={o.v}>
+                          <SelectItem key={o.v} value={o.v}>
                             {dir === "rtl" ? o.labelAr : o.labelEn}
                           </SelectItem>
                         ))}
@@ -152,7 +156,7 @@ export default function AdminLeads() {
                         <SelectValue placeholder={strings.service} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">{strings.allServices}</SelectItem>
+                        <SelectItem value="all">{strings.allServices}</SelectItem>
                         {services.map((s) => (
                           <SelectItem key={s.id} value={s.id}>
                             {s.title}
