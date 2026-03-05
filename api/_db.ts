@@ -26,3 +26,55 @@ export function send(res: VercelResponse, status: number, data: any) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.end(JSON.stringify(data));
 }
+
+export async function ensureCrmSchema() {
+  const p = getPool();
+  await p.query(`
+    create extension if not exists pgcrypto;
+
+    create table if not exists clients (
+      id uuid primary key default gen_random_uuid(),
+      email text unique not null,
+      name text,
+      pin_hash text not null,
+      created_at timestamptz not null default now()
+    );
+
+    create table if not exists projects (
+      id uuid primary key default gen_random_uuid(),
+      client_id uuid not null references clients(id) on delete cascade,
+      title text not null,
+      status text not null default 'active',
+      start_date date,
+      created_at timestamptz not null default now()
+    );
+
+    create table if not exists project_milestones (
+      id uuid primary key default gen_random_uuid(),
+      project_id uuid not null references projects(id) on delete cascade,
+      title text not null,
+      due_date date,
+      state text not null default 'planned',
+      sort int not null default 0,
+      created_at timestamptz not null default now()
+    );
+
+    create table if not exists project_updates (
+      id uuid primary key default gen_random_uuid(),
+      project_id uuid not null references projects(id) on delete cascade,
+      body text not null,
+      created_at timestamptz not null default now()
+    );
+
+    create table if not exists client_sessions (
+      token text primary key,
+      client_id uuid not null references clients(id) on delete cascade,
+      expires_at timestamptz not null,
+      created_at timestamptz not null default now()
+    );
+
+    create index if not exists idx_projects_client_id on projects(client_id);
+    create index if not exists idx_milestones_project_id on project_milestones(project_id);
+    create index if not exists idx_updates_project_id on project_updates(project_id);
+  `);
+}

@@ -73,6 +73,12 @@ export default function SiteFooter() {
                   <Link className="text-muted-foreground hover:text-foreground inline-flex items-center" href="/contact">
                     {t("cta.book")} <ArrowUpRight className="ml-1 h-4 w-4" />
                   </Link>
+                  <Link className="text-muted-foreground hover:text-foreground" href="/pricing-calculator">
+                    {t("nav.pricingCalc")}
+                  </Link>
+                  <Link className="text-muted-foreground hover:text-foreground" href="/portal">
+                    {lang === "ar" ? "بوابة العميل" : "Client portal"}
+                  </Link>
                 </div>
               </div>
             </div>

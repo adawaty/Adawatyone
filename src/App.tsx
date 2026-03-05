@@ -33,6 +33,7 @@ import CaseStudyDetail from "@/pages/CaseStudyDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import AdminLeads from "@/pages/AdminLeads";
+import ClientPortal from "@/pages/ClientPortal";
 import NotFound from "@/pages/NotFound";
 
 function AppRouter() {
@@ -64,6 +65,7 @@ function AppRouter() {
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
         <Route path="/admin" component={AdminLeads} />
+        <Route path="/portal" component={ClientPortal} />
         <Route component={NotFound} />
       </Switch>
     </Router>

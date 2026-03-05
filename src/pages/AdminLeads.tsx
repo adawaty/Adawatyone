@@ -1,11 +1,13 @@
 /*
 Cairo Circuit Futurism — Admin Leads Dashboard
-- Minimal, practical admin surface
-- Login (JWT) + table view
+- PIN auth (x-admin-pin)
+- Same-origin Vercel serverless functions:
+  - GET /api/admin-leads (requires x-admin-pin)
+  - POST /api/public-leads
 
-NOTE: Uses same-origin Vercel serverless functions:
-- GET /api/admin-leads (requires x-admin-pin)
-- POST /api/public-leads
+Fixes:
+- Prevent “enters then goes back”: validate PIN via API before setting authed.
+- Mobile UX: render lead cards on small screens instead of a clipped wide table.
 */
 
 import SiteLayout from "@/components/SiteLayout";
@@ -53,7 +55,7 @@ export default function AdminLeads() {
 
   const strings = {
     title: dir === "rtl" ? "لوحة الإدارة — الليدز" : "Admin Dashboard — Leads",
-    subtitle: dir === "rtl" ? "عرض وفِلترة كل الليدز اللي اتجمعت من الموقع." : "View and filter all collected leads.",
+    subtitle: dir === "rtl" ? "شوف وفِلتر كل الليدز اللي اتجمعت من الموقع." : "View and filter all collected leads.",
     loginTitle: dir === "rtl" ? "تسجيل دخول الإدارة" : "Admin login",
     loginHint: dir === "rtl" ? "اكتب كود الإدارة (PIN)." : "Enter the admin PIN.",
     login: dir === "rtl" ? "دخول" : "Unlock",
@@ -64,9 +66,12 @@ export default function AdminLeads() {
     refresh: dir === "rtl" ? "تحديث" : "Refresh",
     allServices: dir === "rtl" ? "كل الخدمات" : "All services",
     tableEmpty: dir === "rtl" ? "مفيش ليدز مطابقة للفلاتر الحالية." : "No leads match the current filters.",
+    unauthorized: dir === "rtl" ? "مش مصرح" : "Unauthorized",
+    enterPin: dir === "rtl" ? "اكتب الـPIN" : "Enter PIN",
+    unlocked: dir === "rtl" ? "تم" : "Unlocked",
   };
 
-  async function load() {
+  async function loadCurrentFilters() {
     setLoading(true);
     const res = await fetchLeads({
       status: status === "all" ? undefined : status,
@@ -74,24 +79,49 @@ export default function AdminLeads() {
       limit: 200,
     });
     setLoading(false);
+
     if (!res.ok) {
+      setItems([]);
       setAuthed(false);
-      toast.error(dir === "rtl" ? "مش مصرح" : "Unauthorized");
+      setAdminPin(null);
+      toast.error(strings.unauthorized);
+      return { ok: false as const };
+    }
+
+    setItems(res.data?.items ?? []);
+    return { ok: true as const };
+  }
+
+  async function tryUnlock(p: string) {
+    setLoading(true);
+    setAdminPin(p);
+
+    const res = await fetchLeads({ limit: 1 });
+    setLoading(false);
+
+    if (!res.ok) {
+      setAdminPin(null);
+      setAuthed(false);
+      toast.error(strings.unauthorized);
       return;
     }
-    setItems(res.data?.items ?? []);
+
+    setAuthed(true);
+    toast.success(strings.unlocked);
   }
 
   useEffect(() => {
     const existing = getAdminPin();
-    if (existing) {
-      setAuthed(true);
-    }
+    if (!existing) return;
+    // Validate saved PIN first to avoid the “enters then goes back” flicker.
+    tryUnlock(existing);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!authed) return;
-    load();
+    loadCurrentFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authed, status, serviceInterest]);
 
   return (
@@ -110,19 +140,24 @@ export default function AdminLeads() {
                 e.preventDefault();
                 const p = pin.trim();
                 if (!p) {
-                  toast.error(dir === "rtl" ? "اكتب الـPIN" : "Enter PIN");
+                  toast.error(strings.enterPin);
                   return;
                 }
-                setAdminPin(p);
-                setAuthed(true);
-                toast.success(dir === "rtl" ? "تم" : "Unlocked");
+                await tryUnlock(p);
               }}
             >
               <div className="grid gap-2">
-                <Label htmlFor="admin-pin">{dir === "rtl" ? "PIN" : "PIN"}</Label>
-                <Input id="admin-pin" value={pin} onChange={(e) => setPin(e.target.value)} type="password" required />
+                <Label htmlFor="admin-pin">PIN</Label>
+                <Input
+                  id="admin-pin"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                />
               </div>
-              <Button type="submit" size="lg">
+              <Button type="submit" size="lg" disabled={loading}>
                 {strings.login}
               </Button>
             </form>
@@ -168,7 +203,12 @@ export default function AdminLeads() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="secondary" className="bg-white/6 hover:bg-white/10" onClick={() => load()} disabled={loading}>
+                    <Button
+                      variant="secondary"
+                      className="bg-white/6 hover:bg-white/10"
+                      onClick={() => loadCurrentFilters()}
+                      disabled={loading}
+                    >
                       {strings.refresh}
                     </Button>
                     <Button
@@ -186,7 +226,8 @@ export default function AdminLeads() {
               </div>
             </div>
 
-            <Card className="glass rounded-2xl p-0 mt-6 overflow-hidden">
+            {/* Desktop/tablet table */}
+            <Card className="glass rounded-2xl p-0 mt-6 overflow-hidden hidden sm:block">
               <div className="overflow-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-white/4 border-b border-white/10">
@@ -211,9 +252,7 @@ export default function AdminLeads() {
                         <td className="p-3 text-muted-foreground">{x.company ?? "-"}</td>
                         <td className="p-3 text-muted-foreground">{x.service_interest ?? "-"}</td>
                         <td className="p-3">
-                          <span className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">
-                            {x.status}
-                          </span>
+                          <span className="text-xs rounded-full bg-white/6 border border-white/10 px-2.5 py-1">{x.status}</span>
                         </td>
                         <td className="p-3 text-muted-foreground max-w-[320px] truncate" title={x.page_url ?? ""}>
                           {x.page_url ?? "-"}
@@ -224,10 +263,48 @@ export default function AdminLeads() {
                 </table>
               </div>
 
-              {!loading && items.length === 0 ? (
-                <div className="p-6 text-sm text-muted-foreground">{strings.tableEmpty}</div>
-              ) : null}
+              {!loading && items.length === 0 ? <div className="p-6 text-sm text-muted-foreground">{strings.tableEmpty}</div> : null}
             </Card>
+
+            {/* Mobile cards */}
+            <div className="mt-6 grid gap-3 sm:hidden">
+              {items.map((x) => (
+                <Card key={x.id} className="glass rounded-2xl p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="font-semibold truncate">{x.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{fmt(x.created_at)}</div>
+                    </div>
+                    <span className="text-[11px] rounded-full bg-white/6 border border-white/10 px-2 py-1 shrink-0">{x.status}</span>
+                  </div>
+
+                  <div className="mt-3 grid gap-1 text-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-muted-foreground">{dir === "rtl" ? "إيميل" : "Email"}</span>
+                      <span className="truncate">{x.email}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-muted-foreground">{dir === "rtl" ? "موبايل" : "Phone"}</span>
+                      <span className="truncate">{x.phone ?? "-"}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-muted-foreground">{dir === "rtl" ? "شركة" : "Company"}</span>
+                      <span className="truncate">{x.company ?? "-"}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-muted-foreground">{dir === "rtl" ? "الخدمة" : "Service"}</span>
+                      <span className="truncate">{x.service_interest ?? "-"}</span>
+                    </div>
+                  </div>
+
+                  {x.page_url ? (
+                    <div className="mt-3 text-xs text-muted-foreground break-all">{x.page_url}</div>
+                  ) : null}
+                </Card>
+              ))}
+
+              {!loading && items.length === 0 ? <div className="text-sm text-muted-foreground">{strings.tableEmpty}</div> : null}
+            </div>
           </>
         )}
       </section>
