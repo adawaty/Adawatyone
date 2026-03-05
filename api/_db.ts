@@ -12,9 +12,11 @@ export function getPool() {
 }
 
 export function requireAdminPin(req: VercelRequest) {
-  const expected = process.env.ADMIN_PIN || "Adawaty1@2026";
+  const fallback = "Adawaty1@2026";
+  const envList = (process.env.ADMIN_PINS || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const expected = [process.env.ADMIN_PIN, process.env.ADMIN_PIN_SECONDARY, ...envList, fallback].filter(Boolean) as string[];
   const got = String(req.headers["x-admin-pin"] || "").trim();
-  if (!got || got !== expected) {
+  if (!got || !expected.includes(got)) {
     const err: any = new Error("unauthorized");
     err.statusCode = 401;
     throw err;

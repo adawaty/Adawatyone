@@ -6,10 +6,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Router, Route, Switch } from "wouter";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import Preloader from "@/components/Preloader";
+
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { I18nProvider } from "@/contexts/I18nContext";
-import { useState } from "react";
 
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
@@ -33,8 +32,6 @@ import CaseStudyDetail from "@/pages/CaseStudyDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import AdminLeads from "@/pages/AdminLeads";
-import AdminCrm from "@/pages/AdminCrm";
-import AdminSiteEditor from "@/pages/AdminSiteEditor";
 import ClientPortal from "@/pages/ClientPortal";
 import NotFound from "@/pages/NotFound";
 
@@ -67,8 +64,6 @@ function AppRouter() {
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
         <Route path="/admin" component={AdminLeads} />
-        <Route path="/admin/crm" component={AdminCrm} />
-        <Route path="/admin/site" component={AdminSiteEditor} />
         <Route path="/portal" component={ClientPortal} />
         <Route component={NotFound} />
       </Switch>
@@ -77,23 +72,11 @@ function AppRouter() {
 }
 
 export default function App() {
-  const [showPreloader, setShowPreloader] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem("adawaty_preload_done") !== "1";
-  });
 
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <I18nProvider>
-          {showPreloader ? (
-            <Preloader
-              onDone={() => {
-                sessionStorage.setItem("adawaty_preload_done", "1");
-                setShowPreloader(false);
-              }}
-            />
-          ) : null}
           <TooltipProvider>
             <Toaster />
             <AppRouter />

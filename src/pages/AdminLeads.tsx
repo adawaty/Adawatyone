@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useEffect, useMemo, useState } from "react";
 import { fetchLeads, getAdminPin, setAdminPin, type LeadItem } from "@/lib/adminApi";
+import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/contexts/I18nContext";
 import { getServices } from "@/lib/contentLocalized";
 
@@ -224,6 +225,148 @@ export default function AdminLeads() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Admin tools (minimal file count: CRM + Site Editor live here) */}
+            <div className="mt-6 grid gap-3">
+              <details className="rounded-2xl border border-white/10 bg-white/3 p-5">
+                <summary className="cursor-pointer text-sm font-semibold">CRM — create client/project</summary>
+                <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                  <div className="grid gap-2">
+                    <div className="text-xs text-muted-foreground">Create / update client (for /portal)</div>
+                    <Label>Email</Label>
+                    <Input id="crm-client-email" placeholder="client@company.com" />
+                    <Label>{dir === "rtl" ? "اسم" : "Name"}</Label>
+                    <Input id="crm-client-name" placeholder={dir === "rtl" ? "اسم العميل" : "Client name"} />
+                    <Label>PIN</Label>
+                    <Input id="crm-client-pin" type="password" placeholder="••••••" />
+                    <Button
+                      className="mt-2"
+                      onClick={async () => {
+                        const email = (document.getElementById("crm-client-email") as HTMLInputElement)?.value?.trim();
+                        const name = (document.getElementById("crm-client-name") as HTMLInputElement)?.value?.trim();
+                        const pinVal = (document.getElementById("crm-client-pin") as HTMLInputElement)?.value?.trim();
+                        if (!email || !pinVal) {
+                          toast.error(dir === "rtl" ? "اكتب الإيميل والـPIN" : "Email + PIN required");
+                          return;
+                        }
+                        const p = getAdminPin() ?? "";
+                        const r = await fetch("/api/admin-crm", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json", Accept: "application/json", "x-admin-pin": p },
+                          body: JSON.stringify({ action: "create_client", email, name, pin: pinVal }),
+                        });
+                        if (!r.ok) {
+                          toast.error(dir === "rtl" ? "مش مصرح / PIN غلط" : "Unauthorized / wrong PIN");
+                          return;
+                        }
+                        toast.success(dir === "rtl" ? "تم" : "Saved");
+                      }}
+                    >
+                      Save client
+                    </Button>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <div className="text-xs text-muted-foreground">Create project</div>
+                    <Label>{dir === "rtl" ? "إيميل العميل" : "Client email"}</Label>
+                    <Input id="crm-proj-email" placeholder="client@company.com" />
+                    <Label>{dir === "rtl" ? "عنوان المشروع" : "Project title"}</Label>
+                    <Input id="crm-proj-title" placeholder={dir === "rtl" ? "مثلاً: Website + SEO" : "e.g. Website + AI Visibility"} />
+                    <Label>{dir === "rtl" ? "تاريخ البداية" : "Start date"}</Label>
+                    <Input id="crm-proj-start" type="date" />
+                    <Button
+                      className="mt-2"
+                      onClick={async () => {
+                        const email = (document.getElementById("crm-proj-email") as HTMLInputElement)?.value?.trim();
+                        const title = (document.getElementById("crm-proj-title") as HTMLInputElement)?.value?.trim();
+                        const start = (document.getElementById("crm-proj-start") as HTMLInputElement)?.value;
+                        if (!email || !title) {
+                          toast.error(dir === "rtl" ? "اكتب الإيميل والعنوان" : "Client email + title required");
+                          return;
+                        }
+                        const p = getAdminPin() ?? "";
+                        const r = await fetch("/api/admin-crm", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json", Accept: "application/json", "x-admin-pin": p },
+                          body: JSON.stringify({ action: "create_project", client_email: email, title, start_date: start || null }),
+                        });
+                        const j = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                          toast.error(j?.error || (dir === "rtl" ? "فشل" : "Failed"));
+                          return;
+                        }
+                        toast.success(dir === "rtl" ? "اتعمل" : "Created");
+                      }}
+                    >
+                      Create project
+                    </Button>
+                  </div>
+                </div>
+              </details>
+
+              <details className="rounded-2xl border border-white/10 bg-white/3 p-5">
+                <summary className="cursor-pointer text-sm font-semibold">Site editor (Neon JSON)</summary>
+                <div className="mt-4 grid gap-3">
+                  <div className="grid gap-2">
+                    <Label>Page slug</Label>
+                    <Input id="cms-slug" defaultValue="home" />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>content_json</Label>
+                    <Textarea id="cms-json" rows={10} className="font-mono text-xs" defaultValue="{}" />
+                    <div className="text-xs text-muted-foreground">Raw JSON for now. Next step is a visual block editor.</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="secondary"
+                      className="bg-white/6 hover:bg-white/10"
+                      onClick={async () => {
+                        const slug = (document.getElementById("cms-slug") as HTMLInputElement)?.value?.trim() || "home";
+                        const p = getAdminPin() ?? "";
+                        const r = await fetch(`/api/admin-site?slug=${encodeURIComponent(slug)}`, {
+                          headers: { Accept: "application/json", "x-admin-pin": p },
+                        });
+                        const j = await r.json().catch(() => null);
+                        if (!r.ok) {
+                          toast.error(dir === "rtl" ? "مش مصرح" : "Unauthorized");
+                          return;
+                        }
+                        (document.getElementById("cms-json") as HTMLTextAreaElement).value = JSON.stringify(j?.page?.content_json ?? {}, null, 2);
+                        toast.success(dir === "rtl" ? "اتحمل" : "Loaded");
+                      }}
+                    >
+                      Load
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        const slug = (document.getElementById("cms-slug") as HTMLInputElement)?.value?.trim() || "home";
+                        const txt = (document.getElementById("cms-json") as HTMLTextAreaElement)?.value || "{}";
+                        let parsed: any;
+                        try {
+                          parsed = JSON.parse(txt);
+                        } catch (e: any) {
+                          toast.error((dir === "rtl" ? "JSON غلط: " : "Invalid JSON: ") + (e?.message || ""));
+                          return;
+                        }
+                        const p = getAdminPin() ?? "";
+                        const r = await fetch(`/api/admin-site`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json", Accept: "application/json", "x-admin-pin": p },
+                          body: JSON.stringify({ slug, content_json: parsed }),
+                        });
+                        if (!r.ok) {
+                          toast.error(dir === "rtl" ? "مش مصرح" : "Unauthorized");
+                          return;
+                        }
+                        toast.success(dir === "rtl" ? "اتحفظ" : "Saved");
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              </details>
             </div>
 
             {/* Desktop/tablet table */}
