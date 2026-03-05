@@ -1,11 +1,12 @@
 /*
 Solution page data — ERP Workflows
-Designed for process-heavy orgs: approvals, routing, SLAs, audit trails.
+Bilingual (EN/AR): pages choose based on current lang.
 */
 
+import type { Lang } from "@/contexts/I18nContext";
 import type { SolutionTemplateData } from "@/components/solutions/SolutionTemplate";
 
-export const erpWorkflowsSolution: SolutionTemplateData = {
+export const erpWorkflowsSolutionEn: SolutionTemplateData = {
   slug: "erp-workflows",
   title: "ERP Workflows — Approvals, Routing, SLAs",
   subtitle:
@@ -108,7 +109,111 @@ export const erpWorkflowsSolution: SolutionTemplateData = {
   },
 
   serviceSchema: {
-    areaServed: "Worldwide", 
+    areaServed: "Worldwide",
     serviceType: "ERP Workflows",
   },
 };
+
+export const erpWorkflowsSolutionAr: SolutionTemplateData = {
+  slug: "erp-workflows",
+  title: "Workflows حوالين الـERP — موافقات وRouting وSLA",
+  subtitle:
+    "حوّل الـERP من مجرد تخزين بيانات لسيستم تشغيل: موافقات، Routing، وWorkflows قابلة للتدقيق تقلل التأخير والتسريب.",
+
+  whatItIs: {
+    eyebrow: "تشغيل",
+    body:
+      "بنصمم وننفّذ طبقة workflows حوالين الـERP: قواعد، موافقات، تصعيدات، وتنبيهات تخلي العملية ماشية بنفس الطريقة كل مرة—من غير الاعتماد على شخص واحد يشيل الليلة.",
+    bullets: [
+      "استلام طلبات موحد + تحقق",
+      "موافقات بصلاحيات Roles",
+      "SLA timers + تصعيدات",
+      "سجل تدقيق + تقارير",
+    ],
+  },
+
+  whoItsFor: {
+    title: "مناسب لمين؟",
+    segments: [
+      {
+        title: "المالية والمشتريات",
+        body: "سلاسل موافقات، طلبات شراء، موردين، وتحكم في الميزانية—واضح من أول الطلب لحد الدفع.",
+        examples: ["PR/PO", "تفعيل موردين", "تحكم ميزانية"],
+      },
+      {
+        title: "التشغيل واللوجستيات",
+        body: "قواعد Routing، استثناءات، وتنفيذ بزمن محدد—عشان الشغل مايضيعش بين التسليمات.",
+        examples: ["Routing", "استثناءات", "SLA"],
+      },
+      {
+        title: "الإدارة",
+        body: "داشبوردز لللي يهم: زمن الدورة، عنق الزجاجة، الالتزام، فين الوقت والفلوس بتتسرب.",
+        examples: ["Cycle time", "Bottlenecks", "Compliance"],
+      },
+    ],
+  },
+
+  deliverables: {
+    title: "هتستلم إيه؟",
+    items: [
+      "خريطة workflows: الوضع الحالي → الوضع المستهدف",
+      "قواعد + صلاحيات + مصفوفة تصعيد",
+      "خطة ربط بالـERP (API / DB / Middleware)",
+      "تنفيذ workflows + تنبيهات",
+      "داشبوردز: SLA، زمن الدورة، عنق الزجاجة",
+      "سجل تدقيق + توثيق",
+    ],
+  },
+
+  timeline: {
+    title: "المدة",
+    items: [
+      "أسبوع 1 — Discovery + رسم العمليات",
+      "أسبوع 2 — قواعد/صلاحيات + Prototype",
+      "أسبوع 3 — تنفيذ + ربط ERP",
+      "أسبوع 4 — Pilot + تدريب + خطة تعميم",
+    ],
+    note:
+      "لو الـERP معقد أو في موافقات متعددة الكيانات، هنقسّم التنفيذ حسب الأهمية.",
+  },
+
+  integrations: {
+    title: "التكاملات",
+    note: "بنشتغل مع الـERP اللي عندك، مش ضده. نوع الربط حسب النظام والصلاحيات المتاحة.",
+    items: ["SAP / Oracle / Odoo / Dynamics", "إيميل", "واتساب", "SSO", "Power BI", "Data warehouse"],
+  },
+
+  faqs: {
+    title: "أسئلة شائعة",
+    items: [
+      {
+        q: "ده هيبدّل الـERP؟",
+        a: "لأ. ده بيخلي الـERP قابل للتنفيذ بإضافة طبقة workflow (استلام → موافقة → Routing → تقارير). الـERP يفضل مصدر البيانات الأساسي.",
+      },
+      {
+        q: "لو الـERP APIs بتاعته محدودة؟",
+        a: "هنختار أأمن طريقة ربط متاحة (API، Middleware، Export/Import، أو DB بشكل مقيد) ونوثّق الـtradeoffs.",
+      },
+      {
+        q: "إزاي نضمن الالتزام؟",
+        a: "صلاحيات Roles + سجل تدقيق + موافقات موحدة. والتقارير بتخلي أي خروج عن القاعدة ظاهر مش مخفي.",
+      },
+    ],
+  },
+
+  seo: {
+    title: "Workflows حوالين الـERP (موافقات وRouting وSLA) | Adawaty",
+    description:
+      "تنفيذ workflows حوالين الـERP: موافقات، Routing، SLA، وسجل تدقيق—مبني على الـERP الحالي بتاعك.",
+    type: "article",
+  },
+
+  serviceSchema: {
+    areaServed: "Worldwide",
+    serviceType: "ERP Workflows",
+  },
+};
+
+export function getErpWorkflowsSolution(lang: Lang): SolutionTemplateData {
+  return lang === "ar" ? erpWorkflowsSolutionAr : erpWorkflowsSolutionEn;
+}

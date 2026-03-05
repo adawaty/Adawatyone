@@ -13,14 +13,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import { getServices } from "@/lib/contentLocalized";
 
 export default function Contact() {
   const { lang, t } = useI18n();
   const [service, setService] = useState<string | undefined>(undefined);
+  const [prefill, setPrefill] = useState<{ name?: string; email?: string; phone?: string; message?: string; service?: string }>({});
   const services = getServices(lang);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const p = {
+      name: url.searchParams.get("name") ?? undefined,
+      email: url.searchParams.get("email") ?? undefined,
+      phone: url.searchParams.get("phone") ?? undefined,
+      message: url.searchParams.get("message") ?? undefined,
+      service: url.searchParams.get("service") ?? undefined,
+    };
+    setPrefill(p);
+    if (p.service) setService(p.service);
+  }, []);
 
   return (
     <SiteLayout title={t("contact.page.title")} subtitle={t("contact.page.subtitle")}>
@@ -42,6 +57,12 @@ export default function Contact() {
                 });
                 (e.currentTarget as HTMLFormElement).reset();
                 setService(undefined);
+                setPrefill({});
+                if (typeof window !== "undefined") {
+                  const url = new URL(window.location.href);
+                  ["name", "email", "phone", "service", "message"].forEach((k) => url.searchParams.delete(k));
+                  window.history.replaceState({}, "", url.toString());
+                }
               }}
             >
               <div className="grid gap-2 sm:grid-cols-2">
@@ -53,6 +74,7 @@ export default function Contact() {
                     required
                     autoComplete="name"
                     placeholder={t("contact.form.namePh")}
+                    defaultValue={prefill.name}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -65,6 +87,7 @@ export default function Contact() {
                     autoComplete="email"
                     spellCheck={false}
                     placeholder={t("contact.form.emailPh")}
+                    defaultValue={prefill.email}
                   />
                 </div>
               </div>
@@ -79,6 +102,7 @@ export default function Contact() {
                     inputMode="tel"
                     autoComplete="tel"
                     placeholder={t("contact.form.phonePh")}
+                    defaultValue={prefill.phone}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -108,6 +132,7 @@ export default function Contact() {
                   required
                   placeholder={t("contact.form.messagePh")}
                   className="min-h-32 bg-white/3 border-white/10"
+                  defaultValue={prefill.message}
                 />
               </div>
 

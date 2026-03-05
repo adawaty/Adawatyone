@@ -9,6 +9,7 @@ import SeoHead from "@/components/SeoHead";
 import BrandBuildDemandDiagram from "@/components/BrandBuildDemandDiagram";
 import ScrollChapters from "@/components/ScrollChapters";
 import SuccessStoriesTeaser from "@/components/SuccessStoriesTeaser";
+import LeadFunnelSection from "@/components/LeadFunnelSection";
 import { site } from "@/lib/content";
 import heroImg from "@/assets/adawaty-hero-education-industry-02.jpeg";
 import { Button } from "@/components/ui/button";
@@ -268,6 +269,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <LeadFunnelSection />
 
       {/* Scroll stopper: Personas */}
       <ScrollChapters

@@ -1,6 +1,8 @@
 import SolutionTemplate from "@/components/solutions/SolutionTemplate";
-import { appDevelopmentSolution } from "@/pages/solutions/app-development.data";
+import { useI18n } from "@/contexts/I18nContext";
+import { getAppDevelopmentSolution } from "@/pages/solutions/app-development.data";
 
 export default function AppDevelopmentSolutionPage() {
-  return <SolutionTemplate data={appDevelopmentSolution} />;
+  const { lang } = useI18n();
+  return <SolutionTemplate data={getAppDevelopmentSolution(lang)} />;
 }

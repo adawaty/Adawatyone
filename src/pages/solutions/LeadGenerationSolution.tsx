@@ -1,6 +1,8 @@
 import SolutionTemplate from "@/components/solutions/SolutionTemplate";
-import { leadGenerationSolution } from "@/pages/solutions/lead-generation.data";
+import { useI18n } from "@/contexts/I18nContext";
+import { getLeadGenerationSolution } from "@/pages/solutions/lead-generation.data";
 
 export default function LeadGenerationSolutionPage() {
-  return <SolutionTemplate data={leadGenerationSolution} />;
+  const { lang } = useI18n();
+  return <SolutionTemplate data={getLeadGenerationSolution(lang)} />;
 }

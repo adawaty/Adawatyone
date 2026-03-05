@@ -139,8 +139,8 @@ export default function SolutionTemplate({ data }: { data: SolutionTemplateData 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${site.url}/` },
-      { "@type": "ListItem", position: 2, name: "Solutions", item: `${site.url}/solutions` },
+      { "@type": "ListItem", position: 1, name: dir === "rtl" ? "الرئيسية" : "Home", item: `${site.url}/` },
+      { "@type": "ListItem", position: 2, name: dir === "rtl" ? "الحلول" : "Solutions", item: `${site.url}/solutions` },
       { "@type": "ListItem", position: 3, name: data.title, item: `${site.url}/solutions/${data.slug}` },
     ],
   };
@@ -175,7 +175,8 @@ export default function SolutionTemplate({ data }: { data: SolutionTemplateData 
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
               <MagneticCta href="/contact">
-                {dir === "rtl" ? "اطلب نطاق" : "Request scope"} <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
+                {dir === "rtl" ? "ابعت نطاقك" : "Request scope"}{" "}
+                <Arrow className={dir === "rtl" ? "mr-2 h-4 w-4" : "ml-2 h-4 w-4"} />
               </MagneticCta>
               <Button asChild size="lg" variant="secondary" className="bg-white/6 hover:bg-white/10 w-full sm:w-auto">
                 <Link href="/solutions">{dir === "rtl" ? "كل الحلول" : "All solutions"}</Link>

@@ -1,6 +1,8 @@
 import SolutionTemplate from "@/components/solutions/SolutionTemplate";
-import { educationSystemsSolution } from "@/pages/solutions/education-systems.data";
+import { useI18n } from "@/contexts/I18nContext";
+import { getEducationSystemsSolution } from "@/pages/solutions/education-systems.data";
 
 export default function EducationSystemsSolutionPage() {
-  return <SolutionTemplate data={educationSystemsSolution} />;
+  const { lang } = useI18n();
+  return <SolutionTemplate data={getEducationSystemsSolution(lang)} />;
 }

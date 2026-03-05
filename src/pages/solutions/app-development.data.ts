@@ -1,11 +1,12 @@
 /*
 Solution page data — App Development
-Executive-facing, outcome-first copy.
+Bilingual (EN/AR): pages choose based on current lang.
 */
 
+import type { Lang } from "@/contexts/I18nContext";
 import type { SolutionTemplateData } from "@/components/solutions/SolutionTemplate";
 
-export const appDevelopmentSolution: SolutionTemplateData = {
+export const appDevelopmentSolutionEn: SolutionTemplateData = {
   slug: "app-development",
   title: "App Development — MVPs, Portals, Internal Tools",
   subtitle:
@@ -107,7 +108,110 @@ export const appDevelopmentSolution: SolutionTemplateData = {
   },
 
   serviceSchema: {
-    areaServed: "Worldwide", 
+    areaServed: "Worldwide",
     serviceType: "App Development",
   },
 };
+
+export const appDevelopmentSolutionAr: SolutionTemplateData = {
+  slug: "app-development",
+  title: "تطوير تطبيقات — MVP وبورتال وسيستم داخلي",
+  subtitle:
+    "بنطلع منتج الفريق يستعمله فعلاً: MVP محدد، بورتال عملاء، وأدوات تشغيل داخلية—ومعاه قياس واضح مش تخمين.",
+
+  whatItIs: {
+    eyebrow: "تنفيذ DFY",
+    body:
+      "تنفيذ كامل من عندنا لمنتج أو سيستم تشغيل بسرعة وبحوكمة. بنثبت النطاق اللي هيتسلّم، نصمم تجربة استخدام تخلي العميل يثق، وبعدين نبني سيستم قابل للقياس والتطوير مع التكاملات اللي فريقك شغال بيها أصلاً.",
+    bullets: [
+      "تثبيت النطاق: إيه اللي هيتسلّم وإيه اللي لأ",
+      "UX: مهمة واحدة أساسية في كل شاشة",
+      "قياس: تفعيل/استخدام/تسرب",
+      "تسليم وتمكين: توثيق وتسليم ملكية بدون اعتماد دائم",
+    ],
+  },
+
+  whoItsFor: {
+    title: "مناسب لمين؟",
+    segments: [
+      {
+        title: "شركات خدمات محتاجة بورتال",
+        body: "بدّل اللخبطة في الإيميلات ببورتال عملاء: طلبات، ستاتس، ملفات، ومدفوعات—الشغل يمشي من غير مطاردة.",
+        examples: ["بورتال عملاء", "استلام الطلبات", "متابعة الحالة"],
+      },
+      {
+        title: "فرق تشغيل فيها handoffs كتير",
+        body: "أدوات داخلية تقلل التسليمات اليدوية: موافقات، Routing، داشبوردز، واستثناءات.",
+        examples: ["موافقات", "Routing", "داشبورد"],
+      },
+      {
+        title: "مؤسس بيطلع MVP",
+        body: "منتج ينزل السوق بسرعة وتتعلم منه. بنسرّع feedback من غير ما نبني سيستم هش.",
+        examples: ["MVP", "Tracking", "Iteration"],
+      },
+    ],
+  },
+
+  deliverables: {
+    title: "هتستلم إيه؟",
+    items: [
+      "Product brief: أهداف، مستخدمين، قيود، ومؤشرات نجاح",
+      "User journeys + Wireframes + مواصفات تفاعل",
+      "UI system قابل للتوسع",
+      "تطوير + تكاملات + صلاحيات",
+      "Events + داشبوردز (نعرف المستخدم بيعمل إيه فعلاً)",
+      "Checklist إطلاق + توثيق وتسليم",
+    ],
+  },
+
+  timeline: {
+    title: "المدة",
+    items: [
+      "أسبوع 1 — تثبيت النطاق + UX",
+      "أسبوع 2 — UI system + Data model",
+      "أسبوع 3 — تطوير + تكاملات",
+      "أسبوع 4 — QA + إطلاق + تسليم",
+    ],
+    note: "لو الـflows والكونتنت جاهزين، مدة الـMVP ممكن تقل.",
+  },
+
+  integrations: {
+    title: "التكاملات",
+    note: "بنربط اللي يقلل حمل التشغيل: دفع، رسائل، حجز، CRM، وتقارير.",
+    items: ["Stripe / Paymob", "واتساب", "إيميل/SMS", "Calendars", "CRM", "Analytics"],
+  },
+
+  faqs: {
+    title: "أسئلة شائعة",
+    items: [
+      {
+        q: "بتعملوا iOS/Android؟",
+        a: "أيوه. هنرشح أسرع مسار يوصل لنتيجة بريميوم: Web app لو السرعة أهم، أو Mobile لو التوزيع وخصائص الجهاز أساسية.",
+      },
+      {
+        q: "ينفع نشتغل على الـstack الحالي؟",
+        a: "أيوه. بنفهم الـworkflow الأول، وبعدها نكمل على أدواتك أو نبدّل اللي عامل عنق زجاجة.",
+      },
+      {
+        q: "إزاي نتجنب إننا نبني حاجة غلط؟",
+        a: "بنثبت النطاق على نتيجة قابلة للقياس وبنركّب tracking. القرار بيتاخد بالأرقام (تفعيل/تحويل/تسرب) مش بالآراء.",
+      },
+    ],
+  },
+
+  seo: {
+    title: "تطوير تطبيقات (MVP وبورتال وسيستم داخلي) | Adawaty",
+    description:
+      "تطوير تطبيقات DFY: MVP، بورتال عملاء، أدوات تشغيل داخلية، وتكاملات—مع قياس واضح للاستخدام.",
+    type: "article",
+  },
+
+  serviceSchema: {
+    areaServed: "Worldwide",
+    serviceType: "تطوير تطبيقات",
+  },
+};
+
+export function getAppDevelopmentSolution(lang: Lang): SolutionTemplateData {
+  return lang === "ar" ? appDevelopmentSolutionAr : appDevelopmentSolutionEn;
+}
