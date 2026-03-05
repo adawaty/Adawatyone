@@ -29,3 +29,4 @@ upload/pat.txt
 *.njsproj
 *.sln
 *.sw?
+.git-askpass.sh
