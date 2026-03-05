@@ -15,7 +15,7 @@ export default function SiteFooter() {
   const pillarServices = services.filter((s) => (pillars as readonly string[]).includes(s.id));
 
   return (
-    <footer className="mt-20">
+    <footer className="mt-20 pb-24 sm:pb-0">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="glass rounded-2xl p-6 sm:p-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
