@@ -33,6 +33,8 @@ import CaseStudyDetail from "@/pages/CaseStudyDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import AdminLeads from "@/pages/AdminLeads";
+import AdminCrm from "@/pages/AdminCrm";
+import AdminSiteEditor from "@/pages/AdminSiteEditor";
 import ClientPortal from "@/pages/ClientPortal";
 import NotFound from "@/pages/NotFound";
 
@@ -65,6 +67,8 @@ function AppRouter() {
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
         <Route path="/admin" component={AdminLeads} />
+        <Route path="/admin/crm" component={AdminCrm} />
+        <Route path="/admin/site" component={AdminSiteEditor} />
         <Route path="/portal" component={ClientPortal} />
         <Route component={NotFound} />
       </Switch>

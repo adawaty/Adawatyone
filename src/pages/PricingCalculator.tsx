@@ -1,10 +1,18 @@
 /*
-Cairo Circuit Futurism — Pricing Calculator (DFY rollout estimator)
-Overhaul:
-- Live currency conversion (USD base)
-- More currencies: USD, EGP, SAR, EUR, CNY, JPY
-- Adds Lead Generation pricing that starts from $99 and scales
-- Simplifies pricing math: package + add-ons + volume sliders
+Cairo Circuit Futurism — Pricing Calculator (redo)
+Goals:
+- If nothing selected: total = 0
+- Make package concept explicit and understandable
+- Keep logic simple and believable
+- Multi-currency live FX (USD base)
+
+Model:
+1) Choose a Package (optional) — explains what “base” means
+2) Choose Pillars (optional add-ons)
+3) Scale (pages, sprints, content)
+4) Optional Lead Generation (starts from $99)
+
+If user selects nothing (no package, no pillars, no scale, no leads): show 0.
 */
 
 import SiteLayout from "@/components/SiteLayout";
@@ -24,10 +32,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { ArrowLeft, ArrowRight, Calculator, Info, RefreshCcw } from "lucide-react";
 import { convert, fetchFxUSD, getCachedFx, setCachedFx, type FxRates } from "@/lib/fx";
 
-type Stage = "starter" | "growth" | "enterprise";
-
 type Currency = "USD" | "EGP" | "SAR" | "EUR" | "CNY" | "JPY";
-
 const CURRENCIES: Array<{ c: Currency; label: string }> = [
   { c: "USD", label: "USD" },
   { c: "EGP", label: "EGP" },
@@ -37,12 +42,40 @@ const CURRENCIES: Array<{ c: Currency; label: string }> = [
   { c: "JPY", label: "JPY" },
 ];
 
+type PackageId = "none" | "starter" | "growth" | "enterprise";
+const PACKAGES: Array<{ id: PackageId; title: string; usd: number; includes: string[] }> = [
+  {
+    id: "none",
+    title: "No package (build your own)",
+    usd: 0,
+    includes: ["Pick only what you need."],
+  },
+  {
+    id: "starter",
+    title: "Starter package",
+    usd: 299,
+    includes: ["Kickoff + strategy notes", "PM + delivery system", "Basic tracking setup"],
+  },
+  {
+    id: "growth",
+    title: "Growth package",
+    usd: 599,
+    includes: ["Everything in Starter", "Conversion instrumentation", "QA + launch checklist"],
+  },
+  {
+    id: "enterprise",
+    title: "Enterprise package",
+    usd: 999,
+    includes: ["Everything in Growth", "Governance + approvals flow", "Documentation handover"],
+  },
+];
+
 function fmtUsdTo(nUsd: number, currency: Currency, fx: FxRates | null) {
   const v = convert(nUsd, currency, fx);
   return new Intl.NumberFormat("en", {
     style: "currency",
     currency,
-    maximumFractionDigits: currency === "JPY" ? 0 : 0,
+    maximumFractionDigits: 0,
   }).format(v);
 }
 
@@ -53,15 +86,15 @@ export default function PricingCalculator() {
   const industries = getIndustries(lang);
   const services = getServices(lang).filter((s) => s.pillar !== "Concierge");
 
-  const [stage, setStage] = useState<Stage>("growth");
+  const [packageId, setPackageId] = useState<PackageId>("none");
   const [industryId, setIndustryId] = useState<string>(industries[0]?.id ?? "saas");
 
-  // Volume sliders (kept simple)
-  const [pages, setPages] = useState<number>(6);
-  const [contentPerMonth, setContentPerMonth] = useState<number>(8);
-  const [sprints, setSprints] = useState<number>(3);
+  // Scale sliders default to 0 (so “nothing selected” becomes 0)
+  const [pagesExtra, setPagesExtra] = useState<number>(0);
+  const [contentExtra, setContentExtra] = useState<number>(0);
+  const [sprintsExtra, setSprintsExtra] = useState<number>(0);
 
-  // Lead-gen pricing
+  // Lead-gen
   const [leadCount, setLeadCount] = useState<number>(0);
   const [leadEnrichment, setLeadEnrichment] = useState<boolean>(true);
   const [leadOutreachCopy, setLeadOutreachCopy] = useState<boolean>(false);
@@ -72,13 +105,14 @@ export default function PricingCalculator() {
 
   const [selected, setSelected] = useState<Record<string, boolean>>(() => {
     const base: Record<string, boolean> = {};
-    for (const s of services) base[s.id] = true;
+    for (const s of services) base[s.id] = false;
     base.concierge = false;
     return base;
   });
 
   const industry = industries.find((x) => x.id === industryId);
 
+  // Simple, memorable add-ons (USD)
   const addOnsUsd: Record<string, { label: string; usd: number; note: string }> = {
     "brand-intelligence": { label: "Brand Intelligence", usd: 399, note: "Positioning + ICP + offer structure." },
     "brand-system": { label: "Brand System", usd: 599, note: "Identity system + templates + rules." },
@@ -88,49 +122,37 @@ export default function PricingCalculator() {
     concierge: { label: "Concierge partner", usd: 99, note: "Ongoing iteration after launch." },
   };
 
-  const stageBaseUsd = useMemo(() => {
-    // Keep entry points sane, but every optional path starts at $99.
-    if (stage === "starter") return 499;
-    if (stage === "growth") return 899;
-    return 1499;
-  }, [stage]);
-
   const leadPriceUsd = useMemo(() => {
     if (leadCount <= 0) return 0;
-    // Starts from $99 then scales by volume + optional upgrades.
     const blocks = Math.ceil(leadCount / 100);
-    const base = 99 + blocks * 35; // 100 leads block
+    const base = 99 + blocks * 35;
     const enrich = leadEnrichment ? blocks * 12 : 0;
     const copy = leadOutreachCopy ? 149 : 0;
     return base + enrich + copy;
   }, [leadCount, leadEnrichment, leadOutreachCopy]);
 
+  const pkg = PACKAGES.find((p) => p.id === packageId) ?? PACKAGES[0];
+
   const calc = useMemo(() => {
-    const pillarSum = Object.entries(selected)
+    const packageUsd = pkg.usd;
+
+    const pillarUsd = Object.entries(selected)
       .filter(([k, v]) => v && k !== "concierge")
       .reduce((acc, [k]) => acc + (addOnsUsd[k]?.usd ?? 0), 0);
 
-    // Simple volume pricing
-    const pageFactor = Math.max(0, pages - 5) * 30;
-    const contentFactor = Math.max(0, contentPerMonth - 6) * 10;
-    const sprintFactor = Math.max(0, sprints - 2) * 120;
+    // Scale factors: each slider is “extra” units priced in simple steps
+    const pagesUsd = pagesExtra * 35; // each extra page block
+    const contentUsd = contentExtra * 15; // each extra content unit
+    const sprintsUsd = sprintsExtra * 120; // extra sprint
 
-    const subtotalUsd = stageBaseUsd + pillarSum + pageFactor + contentFactor + sprintFactor + leadPriceUsd;
-    const lowUsd = Math.round(subtotalUsd * 0.92);
-    const highUsd = Math.round(subtotalUsd * 1.12);
+    const subtotalUsd = packageUsd + pillarUsd + pagesUsd + contentUsd + sprintsUsd + leadPriceUsd;
 
-    return {
-      stageBaseUsd,
-      pillarSum,
-      pageFactor,
-      contentFactor,
-      sprintFactor,
-      leadPriceUsd,
-      subtotalUsd,
-      lowUsd,
-      highUsd,
-    };
-  }, [stageBaseUsd, selected, pages, contentPerMonth, sprints, leadPriceUsd]);
+    const anySelected = subtotalUsd > 0;
+    const lowUsd = anySelected ? Math.round(subtotalUsd * 0.92) : 0;
+    const highUsd = anySelected ? Math.round(subtotalUsd * 1.12) : 0;
+
+    return { packageUsd, pillarUsd, pagesUsd, contentUsd, sprintsUsd, leadPriceUsd, subtotalUsd, lowUsd, highUsd };
+  }, [pkg.usd, selected, pagesExtra, contentExtra, sprintsExtra, leadPriceUsd]);
 
   async function refreshFx() {
     try {
@@ -139,7 +161,7 @@ export default function PricingCalculator() {
       setFx(data);
       setCachedFx(data);
     } catch {
-      // keep cached fx if any
+      // keep cached
     } finally {
       setFxLoading(false);
     }
@@ -170,18 +192,24 @@ export default function PricingCalculator() {
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <Label>{t("pricing.stage")}</Label>
-                <Select value={stage} onValueChange={(v) => setStage(v as Stage)}>
+              <div className="grid gap-2 sm:col-span-2">
+                <Label>Package (what “base” means)</Label>
+                <Select value={packageId} onValueChange={(v) => setPackageId(v as PackageId)}>
                   <SelectTrigger className="bg-white/3 border-white/10">
-                    <SelectValue placeholder={t("pricing.stage.ph")} />
+                    <SelectValue placeholder="Choose a package" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="starter">{t("pricing.stage.starter")}</SelectItem>
-                    <SelectItem value="growth">{t("pricing.stage.growth")}</SelectItem>
-                    <SelectItem value="enterprise">{t("pricing.stage.enterprise")}</SelectItem>
+                    {PACKAGES.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.title} — {fmtUsdTo(p.usd, currency, fx)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+                <div className="text-xs text-muted-foreground">
+                  <span className="text-foreground">Base package</span> = delivery system + PM + kickoff + QA/launch checklist.
+                  It’s the minimum to run a project cleanly.
+                </div>
               </div>
 
               <div className="grid gap-2">
@@ -203,38 +231,31 @@ export default function PricingCalculator() {
               </div>
 
               <div className="grid gap-2">
-                <Label>
-                  {t("pricing.pages")} ({pages})
-                </Label>
-                <Slider value={[pages]} min={1} max={20} step={1} onValueChange={(v) => setPages(v[0] ?? 6)} />
-                <p className="text-xs text-muted-foreground">{t("pricing.pages.help")}</p>
+                <Label>Scope sliders (extras)</Label>
+                <div className="text-xs text-muted-foreground">Keep 0 unless you want to scale.</div>
               </div>
 
               <div className="grid gap-2">
-                <Label>
-                  {t("pricing.sprints")} ({sprints})
-                </Label>
-                <Slider value={[sprints]} min={1} max={6} step={1} onValueChange={(v) => setSprints(v[0] ?? 3)} />
-                <p className="text-xs text-muted-foreground">{t("pricing.sprints.help")}</p>
+                <Label>Extra pages ({pagesExtra})</Label>
+                <Slider value={[pagesExtra]} min={0} max={15} step={1} onValueChange={(v) => setPagesExtra(v[0] ?? 0)} />
+                <p className="text-xs text-muted-foreground">Adds pages beyond the core set.</p>
+              </div>
+
+              <div className="grid gap-2">
+                <Label>Extra sprints ({sprintsExtra})</Label>
+                <Slider value={[sprintsExtra]} min={0} max={6} step={1} onValueChange={(v) => setSprintsExtra(v[0] ?? 0)} />
+                <p className="text-xs text-muted-foreground">Adds delivery cycles beyond baseline.</p>
               </div>
 
               <div className="grid gap-2 sm:col-span-2">
-                <Label>
-                  {t("pricing.content")} ({contentPerMonth})
-                </Label>
-                <Slider
-                  value={[contentPerMonth]}
-                  min={0}
-                  max={30}
-                  step={1}
-                  onValueChange={(v) => setContentPerMonth(v[0] ?? 8)}
-                />
-                <p className="text-xs text-muted-foreground">{t("pricing.content.help")}</p>
+                <Label>Extra content units / month ({contentExtra})</Label>
+                <Slider value={[contentExtra]} min={0} max={30} step={1} onValueChange={(v) => setContentExtra(v[0] ?? 0)} />
+                <p className="text-xs text-muted-foreground">Used to size the content engine, approvals, and output.</p>
               </div>
             </div>
 
             <div className="mt-7">
-              <div className="text-sm font-medium">{t("pricing.selectPillars")}</div>
+              <div className="text-sm font-medium">Pillars (optional)</div>
               <div className="mt-3 grid gap-3 lg:grid-cols-2">
                 {services.map((s) => {
                   const checked = selected[s.id] ?? false;
@@ -244,12 +265,7 @@ export default function PricingCalculator() {
                       <Checkbox
                         id={`pill-${s.id}`}
                         checked={checked}
-                        onCheckedChange={(v) =>
-                          setSelected((prev) => ({
-                            ...prev,
-                            [s.id]: Boolean(v),
-                          }))
-                        }
+                        onCheckedChange={(v) => setSelected((prev) => ({ ...prev, [s.id]: Boolean(v) }))}
                       />
                       <div className="min-w-0">
                         <Label htmlFor={`pill-${s.id}`} className="text-sm font-semibold">
@@ -261,43 +277,18 @@ export default function PricingCalculator() {
                     </div>
                   );
                 })}
-
-                <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/3 p-4">
-                  <Checkbox
-                    id="pill-concierge"
-                    checked={selected.concierge ?? false}
-                    onCheckedChange={(v) =>
-                      setSelected((prev) => ({
-                        ...prev,
-                        concierge: Boolean(v),
-                      }))
-                    }
-                  />
-                  <div>
-                    <Label htmlFor="pill-concierge" className="text-sm font-semibold">
-                      {addOnsUsd.concierge.label}
-                      <span className="ml-2 text-xs text-muted-foreground">({fmtUsdTo(addOnsUsd.concierge.usd, currency, fx)}{t("pricing.concierge.perMo")})</span>
-                    </Label>
-                    <p className="mt-1 text-xs text-muted-foreground">{addOnsUsd.concierge.note}</p>
-                  </div>
-                </div>
               </div>
             </div>
 
-            {/* Lead Generation pricing (explicit, starting from $99) */}
             <div className="mt-7">
               <div className="text-sm font-medium">Lead generation (starts from $99)</div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Outreach-ready B2B leads list (company + decision maker). Choose volume, then optional enrichment.
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">If you want outreach-ready leads, set a monthly volume.</p>
 
               <div className="mt-3 grid gap-4 rounded-2xl border border-white/10 bg-white/3 p-5">
                 <div className="grid gap-2">
-                  <Label>
-                    Leads / month ({leadCount === 0 ? "off" : leadCount})
-                  </Label>
+                  <Label>Leads / month ({leadCount === 0 ? "off" : leadCount})</Label>
                   <Slider value={[leadCount]} min={0} max={2000} step={50} onValueChange={(v) => setLeadCount(v[0] ?? 0)} />
-                  <div className="text-xs text-muted-foreground">0 = not included. 100–2000 leads per month.</div>
+                  <div className="text-xs text-muted-foreground">0 = not included.</div>
                 </div>
 
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -319,7 +310,7 @@ export default function PricingCalculator() {
                         Outreach copy pack
                         <span className="ml-2 text-xs text-muted-foreground">(+{fmtUsdTo(149, currency, fx)})</span>
                       </Label>
-                      <p className="mt-1 text-xs text-muted-foreground">3 email variants + 2 follow-ups (on-brand).</p>
+                      <p className="mt-1 text-xs text-muted-foreground">3 email variants + 2 follow-ups.</p>
                     </div>
                   </div>
                 </div>
@@ -368,13 +359,11 @@ export default function PricingCalculator() {
 
             <div className="mt-6 rounded-2xl border border-white/10 bg-white/3 p-6">
               <div className="text-xs text-muted-foreground">{t("pricing.range")}</div>
-              <div className="mt-2 text-3xl sm:text-4xl font-semibold">
-                {fmtUsdTo(calc.lowUsd, currency, fx)} – {fmtUsdTo(calc.highUsd, currency, fx)}
-              </div>
+              <div className="mt-2 text-3xl sm:text-4xl font-semibold">{fmtUsdTo(calc.lowUsd, currency, fx)} – {fmtUsdTo(calc.highUsd, currency, fx)}</div>
               <div className="mt-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <Info className="h-3.5 w-3.5" aria-hidden="true" />
-                  {t("pricing.range.note")}
+                  If you select nothing, this shows 0. Add only what you need.
                 </span>
               </div>
             </div>
@@ -383,24 +372,24 @@ export default function PricingCalculator() {
               <div className="text-sm font-medium">Breakdown (USD base)</div>
               <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
                 <div className="flex items-center justify-between">
-                  <span>Package base</span>
-                  <span className="text-foreground">{fmtUsdTo(calc.stageBaseUsd, currency, fx)}</span>
+                  <span>Package</span>
+                  <span className="text-foreground">{fmtUsdTo(calc.packageUsd, currency, fx)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Pillars selected</span>
-                  <span className="text-foreground">{fmtUsdTo(calc.pillarSum, currency, fx)}</span>
+                  <span>Pillars</span>
+                  <span className="text-foreground">{fmtUsdTo(calc.pillarUsd, currency, fx)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Website scope</span>
-                  <span className="text-foreground">{fmtUsdTo(calc.pageFactor, currency, fx)}</span>
+                  <span>Extra pages</span>
+                  <span className="text-foreground">{fmtUsdTo(calc.pagesUsd, currency, fx)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Content scale</span>
-                  <span className="text-foreground">{fmtUsdTo(calc.contentFactor, currency, fx)}</span>
+                  <span>Extra content</span>
+                  <span className="text-foreground">{fmtUsdTo(calc.contentUsd, currency, fx)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Sprints</span>
-                  <span className="text-foreground">{fmtUsdTo(calc.sprintFactor, currency, fx)}</span>
+                  <span>Extra sprints</span>
+                  <span className="text-foreground">{fmtUsdTo(calc.sprintsUsd, currency, fx)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Lead generation</span>

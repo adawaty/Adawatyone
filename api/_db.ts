@@ -73,6 +73,14 @@ export async function ensureCrmSchema() {
       created_at timestamptz not null default now()
     );
 
+    -- Simple CMS / site editor
+    create table if not exists site_pages (
+      slug text primary key,
+      title text,
+      content_json jsonb not null default '{}'::jsonb,
+      updated_at timestamptz not null default now()
+    );
+
     create index if not exists idx_projects_client_id on projects(client_id);
     create index if not exists idx_milestones_project_id on project_milestones(project_id);
     create index if not exists idx_updates_project_id on project_updates(project_id);
