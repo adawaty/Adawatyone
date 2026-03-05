@@ -52,6 +52,7 @@ export async function leadRoutes(app: FastifyInstance, opts: { db: Db }) {
     const q = z
       .object({
         status: z.string().optional(),
+        service_interest: z.string().optional(),
         archived: z.string().optional(),
         limit: z.string().optional(),
         offset: z.string().optional(),
@@ -67,6 +68,10 @@ export async function leadRoutes(app: FastifyInstance, opts: { db: Db }) {
     if (q.status) {
       params.push(q.status);
       where.push(`status = $${params.length}`);
+    }
+    if (q.service_interest) {
+      params.push(q.service_interest);
+      where.push(`service_interest = $${params.length}`);
     }
     if (q.archived === "true" || q.archived === "false") {
       params.push(q.archived === "true");
