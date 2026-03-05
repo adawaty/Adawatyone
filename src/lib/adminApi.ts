@@ -21,6 +21,23 @@ function apiBase(): string {
   return (import.meta.env.VITE_ADMIN_API_BASE as string | undefined) ?? "";
 }
 
+export async function submitLead(payload: {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  service_interest?: string;
+  goal?: string;
+  page_url?: string;
+  lang?: string;
+}) {
+  return jsonFetch("/api/public-leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
 async function jsonFetch(path: string, init?: RequestInit) {
   const base = apiBase();
   const url = `${base}${path}`;

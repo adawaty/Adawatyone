@@ -3,8 +3,9 @@ Cairo Circuit Futurism — Admin Leads Dashboard
 - Minimal, practical admin surface
 - Login (JWT) + table view
 
-NOTE: This is a UI only. The backend must be deployed separately.
-Set VITE_ADMIN_API_BASE to your backend URL (or leave empty for same-origin).
+NOTE: Uses same-origin Vercel serverless functions:
+- GET /api/admin-leads (requires x-admin-pin)
+- POST /api/public-leads
 */
 
 import SiteLayout from "@/components/SiteLayout";

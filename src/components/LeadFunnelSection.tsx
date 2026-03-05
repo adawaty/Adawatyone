@@ -17,6 +17,7 @@ import { getServices } from "@/lib/contentLocalized";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { getFormspreeEndpoint, submitLeadToFormspree } from "@/lib/formspree";
+import { submitLead } from "@/lib/adminApi";
 import { useLocation } from "wouter";
 import { ArrowLeft, ArrowRight, Sparkles, Timer, ShieldCheck } from "lucide-react";
 
@@ -114,6 +115,22 @@ export default function LeadFunnelSection() {
 
                 const pageUrl = typeof window !== "undefined" ? window.location.href : "";
                 const timestampIso = new Date().toISOString();
+
+                submitLead({
+                  name,
+                  email,
+                  phone,
+                  company,
+                  service_interest: service ?? undefined,
+                  goal,
+                  page_url: pageUrl,
+                  lang,
+                })
+                  .then((r) => {
+                    if (r.ok) toast.success(dir === "rtl" ? "اتسجلت" : "Saved");
+                    else toast.error(dir === "rtl" ? "مقدرتش أسجل" : "Could not save");
+                  })
+                  .catch(() => toast.error(dir === "rtl" ? "مقدرتش أسجل" : "Could not save"));
 
                 const endpoint = getFormspreeEndpoint();
                 if (endpoint) {
