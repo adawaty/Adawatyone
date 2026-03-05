@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { ensureCrmSchema, getPool, requireAdminPin, send } from "./_db";
-import { hashPin } from "./_crypto";
+import { ensureCrmSchema, getPool, requireAdmin, send } from "./_db";
+import { hashSecret } from "./_crypto";
 
 // Admin CRM endpoint
 // - GET ?type=projects|clients (simple listing)
@@ -8,7 +8,7 @@ import { hashPin } from "./_crypto";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    requireAdminPin(req);
+    await requireAdmin(req);
     await ensureCrmSchema();
     const pool = getPool();
 
@@ -39,16 +39,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (action === "create_client") {
         const email = String(body.email || "").trim().toLowerCase();
         const name = body.name ? String(body.name).trim() : null;
-        const pin = String(body.pin || "").trim();
-        if (!email || !pin) return send(res, 400, { error: "email_and_pin_required" });
+        const password = String(body.password || "").trim();
+        if (!email || !password) return send(res, 400, { error: "email_and_password_required" });
 
-        const pin_hash = hashPin(pin);
+        const password_hash = hashSecret(password);
         const r = await pool.query(
-          `insert into clients(email, name, pin_hash)
+          `insert into clients(email, name, password_hash)
            values($1,$2,$3)
-           on conflict(email) do update set name=excluded.name, pin_hash=excluded.pin_hash
+           on conflict(email) do update set name=excluded.name, password_hash=excluded.password_hash
            returning id, email, name, created_at`,
-          [email, name, pin_hash]
+          [email, name, password_hash]
         );
         return send(res, 200, { client: r.rows[0] });
       }
@@ -58,16 +58,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const title = String(body.title || "").trim();
         const status = body.status ? String(body.status).trim() : "active";
         const start_date = body.start_date ? String(body.start_date).trim() : null;
+        const selected_services = body.selected_services ?? [];
+        const total_usd = Number(body.total_usd || 0);
         if (!client_email || !title) return send(res, 400, { error: "client_email_and_title_required" });
 
         const c = await pool.query("select id from clients where email=$1", [client_email]);
         if (!c.rows[0]) return send(res, 404, { error: "client_not_found" });
 
         const r = await pool.query(
-          `insert into projects(client_id, title, status, start_date)
-           values($1,$2,$3,$4)
-           returning id, client_id, title, status, start_date, created_at`,
-          [c.rows[0].id, title, status, start_date]
+          `insert into projects(client_id, title, status, start_date, selected_services, total_usd)
+           values($1,$2,$3,$4,$5::jsonb,$6)
+           returning id, client_id, title, status, start_date, selected_services, total_usd, created_at`,
+          [c.rows[0].id, title, status, start_date, JSON.stringify(selected_services), total_usd]
         );
         return send(res, 200, { project: r.rows[0] });
       }

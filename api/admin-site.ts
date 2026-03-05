@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { ensureCrmSchema, getPool, requireAdminPin, send } from "./_db";
+import { ensureCrmSchema, getPool, requireAdmin, send } from "./_db";
 
 // Admin Site Editor API (simple CMS)
 // - Protected by x-admin-pin
@@ -8,7 +8,7 @@ import { ensureCrmSchema, getPool, requireAdminPin, send } from "./_db";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    requireAdminPin(req);
+    await requireAdmin(req);
     await ensureCrmSchema();
     const pool = getPool();
 

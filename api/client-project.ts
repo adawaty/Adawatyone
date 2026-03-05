@@ -37,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { client_id } = await requireClient(req);
 
     const p = await pool.query(
-      "select id, client_id, title, status, start_date, created_at from projects where id=$1",
+      "select id, client_id, title, status, start_date, selected_services, total_usd, created_at from projects where id=$1",
       [id]
     );
     if (!p.rows[0]) return send(res, 404, { error: "not_found" });

@@ -119,6 +119,7 @@ export default function PricingCalculator() {
     "dfy-website": { label: "DFY Website", usd: 999, note: "Design + build + tracking." },
     "content-engine": { label: "Content Engine", usd: 299, note: "Workflow + prompt kits + calendar." },
     "ai-visibility": { label: "AI Visibility", usd: 499, note: "SEO/AEO/LLMSEO upgrades." },
+    "lead-generation": { label: "Lead Generation (B2B leads + enrichment)", usd: 149, note: "Starting point for a small lead batch + enrichment." },
     concierge: { label: "Concierge partner", usd: 99, note: "Ongoing iteration after launch." },
   };
 

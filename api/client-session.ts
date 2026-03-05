@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ensureCrmSchema, getPool, send } from "./_db";
-import { newToken, verifyPin } from "./_crypto";
+import { hashSecret, newToken, verifySecret } from "./_crypto";
 
-// Client login
-// POST { email, pin } -> { token, expires_at }
+// Client auth
+// POST { action: 'signup'|'login', email, password, name? } -> { token, expires_at }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -13,14 +13,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== "POST") return send(res, 405, { error: "method_not_allowed" });
 
     const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body ?? {});
+    const action = String(body.action || "login");
     const email = String(body.email || "").trim().toLowerCase();
-    const pin = String(body.pin || "").trim();
-    if (!email || !pin) return send(res, 400, { error: "email_and_pin_required" });
+    const password = String(body.password || "").trim();
+    const name = body.name ? String(body.name).trim() : null;
+    if (!email || !password) return send(res, 400, { error: "email_and_password_required" });
 
-    const c = await pool.query("select id, pin_hash from clients where email=$1", [email]);
+    if (action === "signup") {
+      const password_hash = hashSecret(password);
+      const r = await pool.query(
+        `insert into clients(email, name, password_hash)
+         values($1,$2,$3)
+         on conflict(email) do nothing
+         returning id`,
+        [email, name, password_hash]
+      );
+      if (!r.rows[0]) return send(res, 409, { error: "already_exists" });
+    }
+
+    const c = await pool.query("select id, password_hash from clients where email=$1", [email]);
     if (!c.rows[0]) return send(res, 401, { error: "unauthorized" });
 
-    const ok = verifyPin(pin, c.rows[0].pin_hash);
+    const ok = verifySecret(password, c.rows[0].password_hash);
     if (!ok) return send(res, 401, { error: "unauthorized" });
 
     const token = newToken();

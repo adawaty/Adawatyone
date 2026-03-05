@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { client_id } = await requireClient(req);
 
     const r = await pool.query(
-      `select id, title, status, start_date, created_at
+      `select id, title, status, start_date, selected_services, total_usd, created_at
          from projects
         where client_id=$1
         order by created_at desc`,

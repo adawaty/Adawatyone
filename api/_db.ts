@@ -17,22 +17,20 @@ export function getPool() {
   return pool;
 }
 
-export function requireAdminPin(req: VercelRequest) {
-  const fallback = "Adawaty1@2026";
-  const got = String(req.headers["x-admin-pin"] || "").trim();
+export async function requireAdmin(req: VercelRequest) {
+  const token = String(req.headers["x-admin-token"] || "").trim();
+  if (!token) {
+    const err: any = new Error("unauthorized");
+    err.statusCode = 401;
+    throw err;
+  }
 
-  // “Flawless” mode: always accept the fallback PIN.
-  // Env vars may be misconfigured on Vercel; this prevents lockout.
-  if (got === fallback) return;
-
-  // Optional: allow additional pins via env.
-  const envList = (process.env.ADMIN_PINS || "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const expected = [process.env.ADMIN_PIN, process.env.ADMIN_PIN_SECONDARY, ...envList].filter(Boolean) as string[];
-
-  if (!got || !expected.includes(got)) {
+  const pool = getPool();
+  const r = await pool.query(
+    `select email from admin_sessions where token=$1 and expires_at > now()` ,
+    [token]
+  );
+  if (!r.rows[0]) {
     const err: any = new Error("unauthorized");
     err.statusCode = 401;
     throw err;
@@ -75,7 +73,7 @@ export async function ensureCrmSchema() {
       id uuid primary key default gen_random_uuid(),
       email text unique not null,
       name text,
-      pin_hash text not null,
+      password_hash text not null,
       created_at timestamptz not null default now()
     );
 
@@ -85,6 +83,8 @@ export async function ensureCrmSchema() {
       title text not null,
       status text not null default 'active',
       start_date date,
+      selected_services jsonb not null default '[]'::jsonb,
+      total_usd int not null default 0,
       created_at timestamptz not null default now()
     );
 
@@ -108,6 +108,13 @@ export async function ensureCrmSchema() {
     create table if not exists client_sessions (
       token text primary key,
       client_id uuid not null references clients(id) on delete cascade,
+      expires_at timestamptz not null,
+      created_at timestamptz not null default now()
+    );
+
+    create table if not exists admin_sessions (
+      token text primary key,
+      email text not null,
       expires_at timestamptz not null,
       created_at timestamptz not null default now()
     );

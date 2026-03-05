@@ -41,11 +41,21 @@ async function jsonFetch(path: string, init?: RequestInit) {
   return { ok: res.ok, status: res.status, data };
 }
 
-export async function clientLogin(email: string, pin: string) {
+export async function clientLogin(email: string, password: string) {
   const res = await jsonFetch("/api/client-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, pin }),
+    body: JSON.stringify({ action: "login", email, password }),
+  });
+  if (res.ok && res.data?.token) setClientToken(String(res.data.token));
+  return res;
+}
+
+export async function clientSignup(email: string, password: string, name?: string) {
+  const res = await jsonFetch("/api/client-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "signup", email, password, name }),
   });
   if (res.ok && res.data?.token) setClientToken(String(res.data.token));
   return res;
