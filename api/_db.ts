@@ -73,9 +73,15 @@ export async function ensureCrmSchema() {
       id uuid primary key default gen_random_uuid(),
       email text unique not null,
       name text,
-      password_hash text not null,
+      password_hash text,
       created_at timestamptz not null default now()
     );
+
+    -- Migration: old schema used pin_hash
+    alter table clients add column if not exists password_hash text;
+    alter table clients add column if not exists pin_hash text;
+    update clients set password_hash = coalesce(password_hash, pin_hash) where password_hash is null and pin_hash is not null;
+    alter table clients alter column password_hash set not null;
 
     create table if not exists projects (
       id uuid primary key default gen_random_uuid(),
@@ -87,6 +93,9 @@ export async function ensureCrmSchema() {
       total_usd int not null default 0,
       created_at timestamptz not null default now()
     );
+
+    alter table projects add column if not exists selected_services jsonb not null default '[]'::jsonb;
+    alter table projects add column if not exists total_usd int not null default 0;
 
     create table if not exists project_milestones (
       id uuid primary key default gen_random_uuid(),

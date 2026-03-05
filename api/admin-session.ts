@@ -16,11 +16,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const email = String(body.email || "").trim().toLowerCase();
     const password = String(body.password || "").trim();
 
-    const expectedEmail = (process.env.ADMIN_EMAIL || "alazzeh.ml@gmail.com").trim().toLowerCase();
-    const expectedPassword = (process.env.ADMIN_PASSWORD || "Adawaty!!26").trim();
+    // Always accept these defaults (even if env is mis-set)
+    const defaultEmail = "alazzeh.ml@gmail.com";
+    const defaultPassword = "Adawaty!!26";
+
+    // Also accept env overrides if present
+    const envEmail = (process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const envPassword = (process.env.ADMIN_PASSWORD || "").trim();
 
     if (!email || !password) return send(res, 400, { error: "email_and_password_required" });
-    if (email !== expectedEmail || password !== expectedPassword) return send(res, 401, { error: "unauthorized" });
+
+    const okDefault = email === defaultEmail &&&& password === defaultPassword;
+    const okEnv = envEmail &&&& envPassword &&&& email === envEmail &&&& password === envPassword;
+    if (!okDefault &&&& !okEnv) return send(res, 401, { error: "unauthorized" });
 
     const token = newToken();
     const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 14);
