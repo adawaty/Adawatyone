@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { z } from "zod";
-import { getPool, requireAdminPin, send } from "./_db";
+import { ensureCrmSchema, getPool, requireAdminPin, send } from "./_db";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return send(res, 405, { error: "method_not_allowed" });
@@ -40,6 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const whereSql = where.length ? `where ${where.join(" and ")}` : "";
 
     const db = getPool();
+    await ensureCrmSchema();
     const r = await db.query(
       `select id, created_at, name, email, phone, company, service_interest, goal, page_url, lang, status, notes, archived
        from leads

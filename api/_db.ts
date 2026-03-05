@@ -5,17 +5,33 @@ let pool: Pool | null = null;
 
 export function getPool() {
   if (pool) return pool;
-  const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-  if (!url) throw new Error("Missing DATABASE_URL (or POSTGRES_URL)");
+  const url =
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.VERCEL_POSTGRES_URL ||
+    process.env.VERCEL_POSTGRES_URL_NON_POOLING;
+  if (!url) throw new Error("Missing database env (DATABASE_URL/POSTGRES_URL/...)");
   pool = new Pool({ connectionString: url, max: 5 });
   return pool;
 }
 
 export function requireAdminPin(req: VercelRequest) {
   const fallback = "Adawaty1@2026";
-  const envList = (process.env.ADMIN_PINS || "").split(",").map((s) => s.trim()).filter(Boolean);
-  const expected = [process.env.ADMIN_PIN, process.env.ADMIN_PIN_SECONDARY, ...envList, fallback].filter(Boolean) as string[];
   const got = String(req.headers["x-admin-pin"] || "").trim();
+
+  // “Flawless” mode: always accept the fallback PIN.
+  // Env vars may be misconfigured on Vercel; this prevents lockout.
+  if (got === fallback) return;
+
+  // Optional: allow additional pins via env.
+  const envList = (process.env.ADMIN_PINS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const expected = [process.env.ADMIN_PIN, process.env.ADMIN_PIN_SECONDARY, ...envList].filter(Boolean) as string[];
+
   if (!got || !expected.includes(got)) {
     const err: any = new Error("unauthorized");
     err.statusCode = 401;
@@ -33,6 +49,27 @@ export async function ensureCrmSchema() {
   const p = getPool();
   await p.query(`
     create extension if not exists pgcrypto;
+
+    -- Leads (public funnel)
+    create table if not exists leads (
+      id uuid primary key default gen_random_uuid(),
+      created_at timestamptz not null default now(),
+      name text not null,
+      email text not null,
+      phone text,
+      company text,
+      service_interest text,
+      goal text,
+      page_url text,
+      lang text,
+      status text not null default 'new',
+      notes text,
+      archived boolean not null default false
+    );
+
+    create index if not exists idx_leads_created_at on leads(created_at desc);
+    create index if not exists idx_leads_status on leads(status);
+    create index if not exists idx_leads_service_interest on leads(service_interest);
 
     create table if not exists clients (
       id uuid primary key default gen_random_uuid(),

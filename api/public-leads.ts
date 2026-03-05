@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { z } from "zod";
-import { getPool, send } from "./_db";
+import { ensureCrmSchema, getPool, send } from "./_db";
+import { sendLeadEmail } from "./_email";
 
 const LeadCreate = z.object({
   name: z.string().min(1),
@@ -19,6 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const body = LeadCreate.parse(req.body);
     const db = getPool();
+    await ensureCrmSchema();
 
     const status = "new";
     const q = await db.query(
@@ -38,7 +40,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ]
     );
 
-    return send(res, 201, { id: q.rows[0].id, created_at: q.rows[0].created_at });
+    const created_at = q.rows[0].created_at as string;
+
+    // Email notification (react-email + Resend)
+    await sendLeadEmail({
+      to: "alazzeh.ml@gmail.com",
+      subject: `New lead: ${body.name} (${body.email})`,
+      lead: {
+        ...body,
+        email: body.email.toLowerCase(),
+        created_at,
+      },
+    });
+
+    return send(res, 201, { id: q.rows[0].id, created_at });
   } catch (e: any) {
     const code = e?.statusCode || 400;
     return send(res, code, { error: "bad_request" });
