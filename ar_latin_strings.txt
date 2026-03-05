@@ -1,0 +1,70 @@
+string_literals_with_latin 70
+- brand-intelligence
+- brand-system
+- dfy-website
+- واجهة المستخدم system ريسبونسف
+- content-engine
+- Content Engine (الذكاء الاصطناعي + مراجعة)
+- ai-visibility
+- On-page تهيئة محركات البحث + تكنيكال
+- Audit + مقارنة منافسين
+- lead-generation
+- قوائم ليدز عالية النية تحت براندك: تارجتينج، إثراء بيانات، تحقق من الإيميلات، وتصديرs جاهزة للأوتريتش.
+- تصدير للـCRM وأدوات الأوتريتش
+- برمجيات كخدمة (SaaS)
+- حوّل منتج SaaS المعقد لقرار شراء واضح — تمركز ورسائل وموقع يحوّل، وبعدها نمو بالكونتنت والظهور في الـالذكاء الاصطناعي.
+- real-estate
+- موقع بريميوم يبني ثقة بسرعة + intake وحجز — عشان البحث يبقى استشارات فعلًا.
+- صفحات تخصصات واضحة + proof
+- Local تهيئة محركات البحث + صفحات سلطة
+- law-1
+- فورم intake بقواعد routing حسب نوع القضية
+- Local تهيئة محركات البحث + FAQ للأسئلة عالية النية
+- law-2
+- Bio hub لمحامي كبير يحوّل الإحالات
+- CTR من روابط واتساب
+- Drop-off على الموبايل
+- Credibility stack فوق (خبرة/اعتمادات/ميديا)
+- CTA واحد أساسي (حجز) + CTA ثانوي (واتساب)
+- Tracking بالأحداث و UTM عشان نعرف المصدر
+- صفحات خدمات مفهومة للمريض + مراجعات + حجز — تقلل no-shows وتزود المواعيد.
+- الحجز يدوي وفيه no-shows
+- صفحات خدمات + FAQ بتجاوب
+- فروع + مراجعات + Local تهيئة محركات البحث
+- med-1
+- مواعيد أكتر… وno-shows أقل
+- صفحات خدمات + FAQ كمسار قرار للمريض
+- حجز مع buffers + تأكيد + reminders
+- Local تهيئة محركات البحث للفروع والمراجعات والكيانات
+- قياس: booked → showed → converted
+- med-2
+- Bio page لدكتور يبني ثقة بسرعة
+- Bounce rate
+- Trust stack فوق: تخصص + اعتمادات + نتايج
+- FAQ لأسئلة المرضى الشائعة
+- business-owners
+- واجهة بريميوم + السيستم اللي وراها: داشبورد، موافقات، بايبلاين، و ERP-lite.
+- biz-1
+- ERP-lite اتعمل على مقاس الشغل
+- شركة SME شغالة بإكسيل كانت محتاجة موافقات وبايبلاين وتقارير من غير ERP تقيل.
+- handoffs يدوي
+- Workflow mapping (as-is → to-be) مع صلاحيات
+- Dashboards للبايبلاين والموافقات والاستثناءات
+- Integrations تقلل إدخال البيانات مرتين
+- biz-2
+- Client portal MVP الناس بتستخدمه
+- شركة خدمات كانت محتاجة portal للطلبات والستاتس والدفع.
+- Tracking للأحداث عشان نعرف التسرب
+- تحسين onboarding لرفع activation
+- app-development
+- bio-pages
+- Bio Pages (صفحة شخصية بتبيع)
+- scheduling-intake
+- حجز + Intake
+- erp-سير عملs
+- ERP-lite (سيستم ماشي مع شغلك)
+- education-systems
+- أنظمة تعليم (LMS  SIS  QMS)
+- personal-brand-rebuild
+- smb-turnkey-launch
+- ai-visibility-foundations
