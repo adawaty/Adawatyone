@@ -82,10 +82,15 @@ export default function AdminLeads() {
     setLoading(false);
 
     if (!res.ok) {
-      setItems([]);
-      setAuthed(false);
-      setAdminPin(null);
-      toast.error(strings.unauthorized);
+      // Only treat 401 as auth failure. Other statuses are backend/DB issues.
+      if (res.status === 401) {
+        setItems([]);
+        setAuthed(false);
+        setAdminPin(null);
+        toast.error(strings.unauthorized);
+      } else {
+        toast.error(dir === "rtl" ? "مشكلة في السيرفر/الداتا" : `Server/DB error (${res.status})`);
+      }
       return { ok: false as const };
     }
 
@@ -95,20 +100,29 @@ export default function AdminLeads() {
 
   async function tryUnlock(p: string) {
     setLoading(true);
-    setAdminPin(p);
 
-    const res = await fetchLeads({ limit: 1 });
-    setLoading(false);
+    // Validate PIN without touching DB first (avoids confusing Unauthorized on DB crash)
+    const pinCheck = await fetch("/api/admin-pin-check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ pin: p }),
+    }).then((r) => r.json().catch(() => null));
 
-    if (!res.ok) {
+    if (!pinCheck?.ok) {
+      setLoading(false);
       setAdminPin(null);
       setAuthed(false);
       toast.error(strings.unauthorized);
       return;
     }
 
+    setAdminPin(p);
     setAuthed(true);
     toast.success(strings.unlocked);
+
+    // Now try to load. If DB is broken, user will see a server error instead of being logged out.
+    await loadCurrentFilters();
+    setLoading(false);
   }
 
   useEffect(() => {
