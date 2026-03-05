@@ -1,20 +1,20 @@
 /*
 Admin API client
-- Uses localStorage token
+- Uses localStorage PIN (x-admin-pin header)
 - Base URL can be set via VITE_ADMIN_API_BASE (default: same origin)
 */
 
-const TOKEN_KEY = "adawaty_admin_token";
+const PIN_KEY = "adawaty_admin_pin";
 
-export function getAdminToken(): string | null {
+export function getAdminPin(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(PIN_KEY);
 }
 
-export function setAdminToken(token: string | null) {
+export function setAdminPin(pin: string | null) {
   if (typeof window === "undefined") return;
-  if (!token) localStorage.removeItem(TOKEN_KEY);
-  else localStorage.setItem(TOKEN_KEY, token);
+  if (!pin) localStorage.removeItem(PIN_KEY);
+  else localStorage.setItem(PIN_KEY, pin);
 }
 
 function apiBase(): string {
@@ -41,12 +41,8 @@ async function jsonFetch(path: string, init?: RequestInit) {
   return { ok: res.ok, status: res.status, data };
 }
 
-export async function adminLogin(email: string, password: string) {
-  return jsonFetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+export function isPinSet(): boolean {
+  return !!getAdminPin();
 }
 
 export type LeadItem = {
@@ -72,7 +68,7 @@ export async function fetchLeads(params: {
   limit?: number;
   offset?: number;
 }) {
-  const token = getAdminToken();
+  const pin = getAdminPin();
   const qs = new URLSearchParams();
   if (params.status) qs.set("status", params.status);
   if (params.service_interest) qs.set("service_interest", params.service_interest);
@@ -82,7 +78,7 @@ export async function fetchLeads(params: {
 
   return jsonFetch(`/api/admin/leads?${qs.toString()}`, {
     headers: {
-      Authorization: token ? `Bearer ${token}` : "",
+      "x-admin-pin": pin ?? "",
     },
   });
 }

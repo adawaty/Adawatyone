@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import type { Db } from "../lib/db";
-import { requireAdmin } from "../lib/auth";
+import { requireAdminPin } from "../lib/auth";
 
 const LeadCreate = z.object({
   name: z.string().min(1),
@@ -48,7 +48,7 @@ export async function leadRoutes(app: FastifyInstance, opts: { db: Db }) {
   });
 
   app.get("/admin/leads", async (req, reply) => {
-    await requireAdmin(req);
+    requireAdminPin(app, req);
     const q = z
       .object({
         status: z.string().optional(),
@@ -93,7 +93,7 @@ export async function leadRoutes(app: FastifyInstance, opts: { db: Db }) {
   });
 
   app.get("/admin/leads/:id", async (req, reply) => {
-    await requireAdmin(req);
+    requireAdminPin(app, req);
     const params = z.object({ id: z.string().uuid() }).parse((req as any).params);
 
     const { rows } = await db.query(
@@ -106,7 +106,7 @@ export async function leadRoutes(app: FastifyInstance, opts: { db: Db }) {
   });
 
   app.patch("/admin/leads/:id", async (req, reply) => {
-    await requireAdmin(req);
+    requireAdminPin(app, req);
     const params = z.object({ id: z.string().uuid() }).parse((req as any).params);
     const body = LeadUpdate.parse(req.body);
 

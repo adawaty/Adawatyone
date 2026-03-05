@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useEffect, useMemo, useState } from "react";
-import { adminLogin, fetchLeads, setAdminToken, type LeadItem } from "@/lib/adminApi";
+import { fetchLeads, getAdminPin, setAdminPin, type LeadItem } from "@/lib/adminApi";
 import { useI18n } from "@/contexts/I18nContext";
 import { getServices } from "@/lib/contentLocalized";
 
@@ -41,8 +41,7 @@ export default function AdminLeads() {
   const { dir, lang } = useI18n();
   const services = useMemo(() => getServices(lang), [lang]);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [pin, setPin] = useState("");
   const [authed, setAuthed] = useState(false);
 
   const [status, setStatus] = useState<string>("");
@@ -55,9 +54,9 @@ export default function AdminLeads() {
     title: dir === "rtl" ? "لوحة الإدارة — الليدز" : "Admin Dashboard — Leads",
     subtitle: dir === "rtl" ? "عرض وفِلترة كل الليدز اللي اتجمعت من الموقع." : "View and filter all collected leads.",
     loginTitle: dir === "rtl" ? "تسجيل دخول الإدارة" : "Admin login",
-    loginHint: dir === "rtl" ? "استخدم إيميل وباسورد الأدمن (JWT)." : "Use your admin email + password (JWT).",
-    login: dir === "rtl" ? "دخول" : "Sign in",
-    logout: dir === "rtl" ? "تسجيل خروج" : "Sign out",
+    loginHint: dir === "rtl" ? "اكتب كود الإدارة (PIN)." : "Enter the admin PIN.",
+    login: dir === "rtl" ? "دخول" : "Unlock",
+    logout: dir === "rtl" ? "تسجيل خروج" : "Lock",
     filters: dir === "rtl" ? "فلاتر" : "Filters",
     status: dir === "rtl" ? "الحالة" : "Status",
     service: dir === "rtl" ? "الخدمة" : "Service interest",
@@ -79,6 +78,13 @@ export default function AdminLeads() {
   }
 
   useEffect(() => {
+    const existing = getAdminPin();
+    if (existing) {
+      setAuthed(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!authed) return;
     load();
   }, [authed, status, serviceInterest]);
@@ -97,28 +103,19 @@ export default function AdminLeads() {
               className="mt-5 grid gap-4"
               onSubmit={async (e) => {
                 e.preventDefault();
-                const res = await adminLogin(email, password);
-                if (!res.ok) {
-                  toast.error(dir === "rtl" ? "بيانات الدخول غلط" : "Invalid credentials");
+                const p = pin.trim();
+                if (!p) {
+                  toast.error(dir === "rtl" ? "اكتب الـPIN" : "Enter PIN");
                   return;
                 }
-                const token = res.data?.token;
-                if (!token) {
-                  toast.error(dir === "rtl" ? "مفيش توكن" : "No token returned");
-                  return;
-                }
-                setAdminToken(token);
+                setAdminPin(p);
                 setAuthed(true);
-                toast.success(dir === "rtl" ? "تم" : "Signed in");
+                toast.success(dir === "rtl" ? "تم" : "Unlocked");
               }}
             >
               <div className="grid gap-2">
-                <Label htmlFor="admin-email">{dir === "rtl" ? "الإيميل" : "Email"}</Label>
-                <Input id="admin-email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="admin-pass">{dir === "rtl" ? "الباسورد" : "Password"}</Label>
-                <Input id="admin-pass" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
+                <Label htmlFor="admin-pin">{dir === "rtl" ? "PIN" : "PIN"}</Label>
+                <Input id="admin-pin" value={pin} onChange={(e) => setPin(e.target.value)} type="password" required />
               </div>
               <Button type="submit" size="lg">
                 {strings.login}
@@ -173,7 +170,7 @@ export default function AdminLeads() {
                       variant="secondary"
                       className="bg-white/6 hover:bg-white/10"
                       onClick={() => {
-                        setAdminToken(null);
+                        setAdminPin(null);
                         setAuthed(false);
                       }}
                     >
